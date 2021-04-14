@@ -1,0 +1,30 @@
+{
+	"name": "tidal-rpc",
+	"version": "1.0.0",
+	"description": "Unofficial Tidal Rich Presence",
+	"license": "MIT",
+	"main": "dist/index.js",
+	"scripts": {
+		"dev": "devScript",
+		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
+		"start": "yarn paths && node dist/index.js"
+	},
+	"dependencies": {
+		"@types/axios": "^0.14.0",
+		"@types/discord-rpc": "^3.0.5",
+		"@types/figlet": "^1.5.0",
+		"@types/node": "^14.14.37",
+		"axios": "^0.21.1",
+		"discord-rpc": "^3.2.0",
+		"figlet": "^1.5.0",
+		"node-window-manager": "^2.2.4",
+		"tscpaths": "^0.0.9"
+	},
+	"devDependencies": {
+		"ts-devscript": "^3.0.3"
+	},
+	"devScript": {
+		"autoInstallDep": false,
+		"autoRemoveDep": false
+	}
+}
