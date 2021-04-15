@@ -28,8 +28,7 @@ export default class tidalAPI {
 			}
 		});
 
-		if (res.data.items.length === 0)
-			throw new Error("Can't find anything for this query.");
+		if (res.data.items.length === 0) return [];
 
 		return res.data.items;
 	}
@@ -46,8 +45,7 @@ export default class tidalAPI {
 			}
 		});
 
-		if (res.status === 404)
-			throw new Error("Can't find anything for this query.");
+		if (res.status === 404) return [];
 
 		return res.data;
 	}

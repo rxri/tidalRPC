@@ -48,7 +48,7 @@ export default class TidalManager {
 						tidalStatus.windowTitle as string
 					);
 
-					if (getInfo.length === 0) throw new Error("No response from API.");
+					if (getInfo.length === 0) return;
 
 					for (let i = 0, l = getInfo.length; i < l; i++) {
 						if (getInfo[i].audioQuality === "HI_RES") {
@@ -74,9 +74,14 @@ export default class TidalManager {
 
 					if (getInfo[0].url)
 						this.currentSong.buttons = [
-							{ label: "Listen along!", url: getInfo[0].url },
-							{ label: "View Album", url: getAlbumInfo.url }
+							{ label: "Listen along!", url: getInfo[0].url }
 						];
+
+					if (getAlbumInfo)
+						this.currentSong.buttons?.push({
+							label: "View Album",
+							url: getAlbumInfo.url
+						});
 
 					return setActivity(this.currentSong);
 				}
