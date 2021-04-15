@@ -84,6 +84,8 @@ export const setActivity = (data: Song) => {
 		if (data.duration && presenceData.startTimestamp)
 			delete presenceData.startTimestamp;
 
+		if (data.buttons?.length === 0) delete presenceData.buttons;
+
 		logger.extend("discordManager").extend("setActivity")(
 			`Setting activity with ${data.artist} - ${
 				data.title
