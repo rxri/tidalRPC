@@ -1,4 +1,5 @@
 import TidalManager from "@managers/tidal.manager";
+import TrayManager from "@managers/tray.manager";
 import debug from "debug";
 import { destroyClient } from "@managers/discord.manager";
 import { logger } from "./config";
@@ -6,10 +7,12 @@ import { textSync } from "figlet";
 
 export default class App {
 	private logger: debug.Debugger;
-	tidalManager: TidalManager;
+	private tidalManager: TidalManager;
+	private trayManager: TrayManager;
 	constructor() {
 		this.logger = logger.extend("Application");
 		this.tidalManager = new TidalManager();
+		this.trayManager = new TrayManager();
 	}
 
 	private _figlet() {
@@ -17,6 +20,7 @@ export default class App {
 	}
 
 	private _init() {
+		this.trayManager.start();
 		this.logger.extend("rpcLoop")("Starting RPC Loop...");
 		this.tidalManager.rpcLoop();
 	}
