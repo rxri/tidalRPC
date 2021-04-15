@@ -15,6 +15,8 @@ export default class tidalAPI {
 	}
 
 	async searchSong(query: string, limit = 25) {
+		if (!query) throw new Error("SearchSong: No query specified.");
+
 		const res = await this.axios({
 			method: "GET",
 			url: "/search/tracks",
@@ -26,11 +28,27 @@ export default class tidalAPI {
 			}
 		});
 
-		if (!query) throw new Error("SearchSong: No query specified.");
-
 		if (res.data.items.length === 0)
 			throw new Error("Can't find anything for this query.");
 
 		return res.data.items;
+	}
+
+	async getAlbumById(id: number) {
+		if (!id) throw new Error("getAlbumById: No query specified.");
+
+		const res = await this.axios({
+			method: "GET",
+			url: `/albums/${id}`,
+			params: {
+				offset: 0,
+				countryCode: "US"
+			}
+		});
+
+		if (res.status === 404)
+			throw new Error("Can't find anything for this query.");
+
+		return res.data;
 	}
 }

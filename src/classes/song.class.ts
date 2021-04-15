@@ -6,6 +6,7 @@ export default class Song {
 	pausedTime: number;
 	paused: boolean;
 	quality: "HI_RES" | "LOSSLESS" | "NORMAL";
+	buttons?: { label: string; url: string }[];
 
 	constructor() {
 		this.title = undefined;

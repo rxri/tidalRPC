@@ -11,6 +11,7 @@ interface presenceStructure {
 	endTimestamp?: number;
 	largeImageText?: string;
 	largeImageKey?: string;
+	buttons?: { label: string; url: string }[];
 }
 
 interface currentSong {

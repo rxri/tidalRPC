@@ -54,6 +54,8 @@ export default class TidalManager {
 					if (getInfo[0].title !== data[0])
 						throw new Error("Something bad happened.");
 
+					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id);
+
 					const timeNow = Math.round(new Date().getTime() / 1000);
 
 					this.currentSong.artist = await this.getAuthors(getInfo[0].artists);
@@ -63,6 +65,12 @@ export default class TidalManager {
 					this.currentSong.startTime = 0;
 					this.currentSong.pausedTime = 0;
 					this.currentSong.startTime = timeNow;
+
+					if (getInfo[0].url)
+						this.currentSong.buttons = [
+							{ label: "Listen along!", url: getInfo[0].url },
+							{ label: "Visit Album", url: getAlbumInfo.url }
+						];
 
 					return setActivity(this.currentSong);
 				}

@@ -49,12 +49,12 @@ class discordClient {
 }
 
 export const setActivity = (data: Song) => {
-	const presenceData: presenceStructure = {
-		largeImageKey: "logo",
-		largeImageText: "Tidal"
-	};
-
 	if (!data?.startTime) return clearActivity();
+
+	const presenceData: presenceStructure = {
+		largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
+		largeImageText: data.quality === "HI_RES" ? "Tidal (MQA)" : "Tidal"
+	};
 
 	if (!data.duration) presenceData.startTimestamp = data.startTime;
 	else
@@ -66,10 +66,7 @@ export const setActivity = (data: Song) => {
 	presenceData.smallImageKey = data.paused ? "pause" : "play";
 	presenceData.smallImageText = data.paused ? "Paused" : "Playing";
 
-	if (data.quality === "HI_RES") {
-		presenceData.largeImageText = "Tidal (MQA)";
-		presenceData.largeImageKey = "logo_mqa";
-	}
+	if (data.buttons) presenceData.buttons = data.buttons;
 
 	if (data.paused && presenceData.endTimestamp)
 		delete presenceData.endTimestamp;
