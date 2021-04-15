@@ -76,15 +76,14 @@ export const setActivity = (data: Song) => {
 		presenceData.smallImageKey = data.paused ? "pause" : "play";
 		presenceData.smallImageText = data.paused ? "Paused" : "Playing";
 
-		if (data.buttons) presenceData.buttons = data.buttons;
+		if (data.buttons && data.buttons.length !== 0)
+			presenceData.buttons = data.buttons;
 
 		if (data.paused && presenceData.endTimestamp)
 			delete presenceData.endTimestamp;
 
 		if (data.duration && presenceData.startTimestamp)
 			delete presenceData.startTimestamp;
-
-		if (data.buttons?.length === 0) delete presenceData.buttons;
 
 		logger.extend("discordManager").extend("setActivity")(
 			`Setting activity with ${data.artist} - ${
