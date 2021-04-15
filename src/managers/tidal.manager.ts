@@ -69,7 +69,7 @@ export default class TidalManager {
 					if (getInfo[0].url)
 						this.currentSong.buttons = [
 							{ label: "Listen along!", url: getInfo[0].url },
-							{ label: "Visit Album", url: getAlbumInfo.url }
+							{ label: "View Album", url: getAlbumInfo.url }
 						];
 
 					return setActivity(this.currentSong);

@@ -2,6 +2,7 @@ import { Client, Presence } from "discord-rpc";
 import { clientID, logger } from "../config";
 
 import Song from "@classes/song.class";
+import { formatTime } from "@util/formatTime";
 
 let rpcClient: discordClient;
 
@@ -75,7 +76,9 @@ export const setActivity = (data: Song) => {
 		delete presenceData.startTimestamp;
 
 	logger.extend("discordManager").extend("setActivity")(
-		`Setting activity with ${data.artist} - ${data.title}. Duration (in seconds): ${data.duration}`
+		`Setting activity with ${data.artist} - ${
+			data.title
+		}. Duration: ${formatTime(data.duration)}`
 	);
 
 	if (!rpcClient) {
