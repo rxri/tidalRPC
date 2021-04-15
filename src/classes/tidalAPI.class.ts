@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from "axios";
 
 export default class tidalAPI {
-	baseURL: string;
-	webToken: string;
-	headers: requestHeaders;
-	axios: AxiosInstance;
+	private baseURL: string;
+	private webToken: string;
+	private headers: requestHeaders;
+	private axios: AxiosInstance;
 	constructor() {
 		this.baseURL = "https://api.tidal.com/v1";
 		this.webToken = "CzET4vdadNUFQ5JU"; // from another repo for testing purposes

@@ -35,9 +35,8 @@ export default class Process {
 		if (
 			this.tidalStatus.windowTitle &&
 			this.titleRegex.test(this.tidalStatus.windowTitle)
-		) {
+		)
 			this.tidalStatus.status = "playing";
-		}
 	}
 
 	private async getProcessList(): Promise<Window[] | null> {

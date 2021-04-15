@@ -10,7 +10,8 @@
 		"baseUrl": "src",
 		"paths": {
 			"@classes/*": ["classes/*"],
-			"@managers/*": ["managers/*"]
+			"@managers/*": ["managers/*"],
+			"@util/*": ["util/*"]
 		},
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true

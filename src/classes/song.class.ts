@@ -5,6 +5,7 @@ export default class Song {
 	duration: number;
 	pausedTime: number;
 	paused: boolean;
+	quality: "HI_RES" | "LOSSLESS" | "NORMAL";
 
 	constructor() {
 		this.title = undefined;
@@ -13,5 +14,6 @@ export default class Song {
 		this.duration = 0;
 		this.pausedTime = 0;
 		this.paused = false;
+		this.quality = "NORMAL";
 	}
 }

@@ -1,12 +1,4 @@
-import TidalManager from "@managers/tidal.manager";
-import figlet from "figlet";
+import App from "./app";
 
-figlet("tidal-rpc", (err, data) => {
-	console.log(data);
-});
-
-const res = new TidalManager();
-res.rpcLoop();
-setInterval(() => {
-	res.rpcLoop();
-}, 1000);
+const app = new App();
+app.start();
