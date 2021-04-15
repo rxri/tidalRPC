@@ -61,8 +61,8 @@ export const setActivity = (data: Song) => {
 		presenceData.endTimestamp =
 			data.startTime + data.duration + data.pausedTime;
 
-	presenceData.state = data.title;
-	presenceData.details = data.artist;
+	presenceData.state = data.artist;
+	presenceData.details = data.title;
 	presenceData.smallImageKey = data.paused ? "pause" : "play";
 	presenceData.smallImageText = data.paused ? "Paused" : "Playing";
 
