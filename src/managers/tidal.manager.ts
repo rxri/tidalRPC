@@ -1,7 +1,8 @@
+import { clearActivity, setActivity } from "@managers/discord.manager";
+
 import Process from "@classes/process.class";
 import Song from "@classes/song.class";
 import { compareTitle } from "@util/compareTitle";
-import { setActivity } from "@managers/discord.manager";
 import tidalAPI from "@classes/tidalAPI.class";
 
 export default class TidalManager {
@@ -48,7 +49,7 @@ export default class TidalManager {
 						tidalStatus.windowTitle as string
 					);
 
-					if (getInfo.length === 0) return;
+					if (getInfo.length === 0) return clearActivity();
 
 					for (let i = 0, l = getInfo.length; i < l; i++) {
 						if (getInfo[i].audioQuality === "HI_RES") {

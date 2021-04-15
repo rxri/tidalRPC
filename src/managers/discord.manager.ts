@@ -59,49 +59,47 @@ class discordClient {
 }
 
 export const setActivity = (data: Song) => {
-	if (!data?.startTime) return clearActivity();
+		if (!data?.startTime) return clearActivity();
 
-	const presenceData: presenceStructure = {
-		largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
-		largeImageText: data.quality === "HI_RES" ? "Tidal (MQA)" : "Tidal"
+		const presenceData: presenceStructure = {
+			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
+			largeImageText: data.quality === "HI_RES" ? "Tidal (MQA)" : "Tidal"
+		};
+
+		if (!data.duration) presenceData.startTimestamp = data.startTime;
+		else
+			presenceData.endTimestamp =
+				data.startTime + data.duration + data.pausedTime;
+
+		presenceData.state = data.artist;
+		presenceData.details = data.title;
+		presenceData.smallImageKey = data.paused ? "pause" : "play";
+		presenceData.smallImageText = data.paused ? "Paused" : "Playing";
+
+		if (data.buttons) presenceData.buttons = data.buttons;
+
+		if (data.paused && presenceData.endTimestamp)
+			delete presenceData.endTimestamp;
+
+		if (data.duration && presenceData.startTimestamp)
+			delete presenceData.startTimestamp;
+
+		logger.extend("discordManager").extend("setActivity")(
+			`Setting activity with ${data.artist} - ${
+				data.title
+			}. Duration: ${formatTime(data.duration)}`
+		);
+
+		if (!rpcClient) {
+			rpcClient = new discordClient(clientID);
+			rpcClient.actualPresence = presenceData;
+		} else rpcClient.setActivity(presenceData);
+	},
+	clearActivity = () => {
+		if (!rpcClient) return;
+		rpcClient.clearActivity();
+	},
+	destroyClient = () => {
+		if (!rpcClient) return;
+		rpcClient.destroyClient();
 	};
-
-	if (!data.duration) presenceData.startTimestamp = data.startTime;
-	else
-		presenceData.endTimestamp =
-			data.startTime + data.duration + data.pausedTime;
-
-	presenceData.state = data.artist;
-	presenceData.details = data.title;
-	presenceData.smallImageKey = data.paused ? "pause" : "play";
-	presenceData.smallImageText = data.paused ? "Paused" : "Playing";
-
-	if (data.buttons) presenceData.buttons = data.buttons;
-
-	if (data.paused && presenceData.endTimestamp)
-		delete presenceData.endTimestamp;
-
-	if (data.duration && presenceData.startTimestamp)
-		delete presenceData.startTimestamp;
-
-	logger.extend("discordManager").extend("setActivity")(
-		`Setting activity with ${data.artist} - ${
-			data.title
-		}. Duration: ${formatTime(data.duration)}`
-	);
-
-	if (!rpcClient) {
-		rpcClient = new discordClient(clientID);
-		rpcClient.actualPresence = presenceData;
-	} else rpcClient.setActivity(presenceData);
-};
-
-const clearActivity = () => {
-	if (!rpcClient) return;
-	rpcClient.clearActivity();
-};
-
-export const destroyClient = () => {
-	if (!rpcClient) return;
-	rpcClient.destroyClient();
-};
