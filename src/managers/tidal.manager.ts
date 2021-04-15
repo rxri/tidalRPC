@@ -44,19 +44,25 @@ export default class TidalManager {
 						return true;
 					}
 
-					const getInfo = await this.api.searchSong(
-						tidalStatus.windowTitle as string,
-						1
+					let getInfo = await this.api.searchSong(
+						tidalStatus.windowTitle as string
 					);
 
 					if (getInfo.length === 0) throw new Error("No response from API.");
 
+					for (let i = 0, l = getInfo.length; i < l; i++) {
+						if (getInfo[i].audioQuality === "HI_RES") {
+							getInfo = [getInfo[i]];
+							i = getInfo.length;
+							break;
+						}
+					}
+
 					if (getInfo[0].title !== data[0])
 						throw new Error("Something bad happened.");
 
-					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id);
-
-					const timeNow = Math.round(new Date().getTime() / 1000);
+					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
+						timeNow = Math.round(new Date().getTime() / 1000);
 
 					this.currentSong.artist = await this.getAuthors(getInfo[0].artists);
 					this.currentSong.title = getInfo[0].title;
