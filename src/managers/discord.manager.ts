@@ -24,6 +24,15 @@ class discordClient {
 			this.setActivity();
 		});
 
+		this.client.on(
+			// @ts-ignore
+			"disconnected",
+			() => {
+				this.client.destroy();
+				rpcClient = undefined!;
+			}
+		);
+
 		this.client
 			.login({ clientId: this.clientId })
 			.catch(err => console.error(err));
