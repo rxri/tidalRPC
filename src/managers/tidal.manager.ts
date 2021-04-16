@@ -51,15 +51,21 @@ export default class TidalManager {
 
 					if (getInfo.length === 0) return clearActivity();
 
-					getInfo.map((song: { audioQuality: string; title: string }) => {
-						if (song.audioQuality === "HI_RES" && song.title === data[0]) {
-							return (getInfo = [song]);
-						}
+					getInfo.map(
+						(song: {
+							audioQuality: string;
+							title: string;
+							version: string | null;
+						}) => {
+							if (song.audioQuality === "HI_RES" && song.title === data[0]) {
+								return (getInfo = [song]);
+							}
 
-						if (song.title === data[0]) {
-							return (getInfo = [song]);
+							if (song.title === data[0]) {
+								return (getInfo = [song]);
+							}
 						}
-					});
+					);
 
 					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
 						timeNow = Math.round(new Date().getTime() / 1000);
