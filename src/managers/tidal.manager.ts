@@ -56,7 +56,7 @@ export default class TidalManager {
 							return (getInfo = [song]);
 						}
 
-						if (song.title === data[0]) return (getInfo = [song]);
+						if (song.title === data[0]) getInfo = [song];
 					});
 
 					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
