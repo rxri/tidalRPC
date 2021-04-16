@@ -61,7 +61,7 @@ class discordClient {
 export const setActivity = (data: Song) => {
 		if (!data?.startTime) return clearActivity();
 
-		const presenceData: presenceStructure = {
+		const presenceData: Presence = {
 			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
 			largeImageText: data.quality === "HI_RES" ? "Tidal (MQA)" : "Tidal"
 		};
