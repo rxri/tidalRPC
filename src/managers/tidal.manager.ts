@@ -68,6 +68,7 @@ export default class TidalManager {
 					this.currentSong.quality = getInfo[0].audioQuality;
 					this.currentSong.startTime = 0;
 					this.currentSong.pausedTime = 0;
+					this.currentSong.paused = false;
 					this.currentSong.startTime = timeNow;
 					this.currentSong.buttons = [];
 
