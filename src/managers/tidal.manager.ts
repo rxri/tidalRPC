@@ -15,7 +15,8 @@ export default class TidalManager {
 
 	async rpcLoop() {
 		const tidalStatus = await (await this.getProcess()).tidalStatus;
-		if (!tidalStatus.windowTitle && tidalStatus.status === "closed") return;
+		if (!tidalStatus.windowTitle && tidalStatus.status === "closed")
+			return clearActivity();
 		switch (tidalStatus.status) {
 			case "opened":
 				{
