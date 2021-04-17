@@ -15,7 +15,8 @@ export default class TidalManager {
 
 	async rpcLoop() {
 		const tidalStatus = await (await this.getProcess()).tidalStatus;
-		if (!tidalStatus.windowTitle && tidalStatus.status === "closed") return;
+		if (!tidalStatus.windowTitle && tidalStatus.status === "closed")
+			return clearActivity();
 		switch (tidalStatus.status) {
 			case "opened":
 				{
@@ -51,14 +52,12 @@ export default class TidalManager {
 
 					if (getInfo.length === 0) return clearActivity();
 
-					getInfo.map((song: { audioQuality: string; title: string }) => {
+					getInfo.find((song: { audioQuality: string; title: string }) => {
 						if (song.audioQuality === "HI_RES" && song.title === data[0]) {
 							return (getInfo = [song]);
 						}
 
-						if (song.title === data[0]) {
-							return (getInfo = [song]);
-						}
+						if (song.title === data[0]) getInfo = [song];
 					});
 
 					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
@@ -70,6 +69,7 @@ export default class TidalManager {
 					this.currentSong.quality = getInfo[0].audioQuality;
 					this.currentSong.startTime = 0;
 					this.currentSong.pausedTime = 0;
+					this.currentSong.paused = false;
 					this.currentSong.startTime = timeNow;
 					this.currentSong.buttons = [];
 
@@ -84,6 +84,8 @@ export default class TidalManager {
 							label: "View Album",
 							url: getAlbumInfo.url
 						});
+
+					console.log(this.currentSong);
 
 					return setActivity(this.currentSong);
 				}
