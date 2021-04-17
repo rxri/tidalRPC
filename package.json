@@ -16,7 +16,7 @@
 		"debug": "^4.3.1",
 		"discord-rpc": "^3.2.0",
 		"figlet": "^1.5.0",
-		"node-window-manager": "^2.2.4",
+		"node-window-manager": "2.2.3",
 		"systray2": "^2.1.2"
 	},
 	"devDependencies": {
