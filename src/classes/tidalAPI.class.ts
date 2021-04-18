@@ -7,7 +7,7 @@ export default class tidalAPI {
 	private axios: AxiosInstance;
 	constructor() {
 		this.baseURL = "https://api.tidal.com/v1";
-		this.webToken = "CzET4vdadNUFQ5JU"; // from another repo for testing purposes
+		this.webToken = "CzET4vdadNUFQ5JU";
 		this.headers = {
 			"x-tidal-token": this.webToken
 		};
