@@ -1,15 +1,15 @@
 {
 	"name": "tidal-rpc",
 	"version": "1.0.0",
-	"description": "Unofficial Tidal Rich Presence",
+	"description": "Unofficial Discord Rich Presence for Tidal Desktop app.",
 	"license": "GPL-3.0",
 	"author": "ririxidev <mail@ririxi.dev>",
-	"main": "dist/index.js",
+	"main": "index.js",
 	"scripts": {
 		"dev": "devScript",
 		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
-		"start": "yarn paths && node dist/index.js",
-		"build": "node compile.js"
+		"start": "yarn paths && electron dist/index.js",
+		"build": "electron-builder --config builder.json"
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
@@ -17,16 +17,16 @@
 		"discord-rpc": "^3.2.0",
 		"figlet": "^1.5.0",
 		"node-mac-permissions": "^2.2.0",
-		"node-window-manager": "2.2.3",
-		"systray2": "^2.1.2"
+		"node-window-manager": "2.2.3"
 	},
 	"devDependencies": {
 		"@types/axios": "^0.14.0",
 		"@types/debug": "^4.1.5",
 		"@types/discord-rpc": "^3.0.5",
-		"@types/figlet": "^1.5.0",
+		"@types/figlet": "^1.5.1",
 		"@types/node": "^14.14.41",
-		"nexe": "^4.0.0-beta.18",
+		"electron": "^12.0.4",
+		"electron-builder": "^22.10.5",
 		"ts-devscript": "^3.0.3",
 		"tscpaths": "^0.0.9"
 	},

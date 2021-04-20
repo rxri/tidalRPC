@@ -1,22 +1,19 @@
 import debug from "debug";
+import { app, dialog } from "electron";
 import { textSync } from "figlet";
-import { getAuthStatus } from "node-mac-permissions";
+import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform } from "os";
 
-import { destroyClient } from "@managers/discord.manager";
 import TidalManager from "@managers/tidal.manager";
-import TrayManager from "@managers/tray.manager";
 
 import { logger } from "./config";
 
 export default class App {
 	private logger: debug.Debugger;
 	private tidalManager: TidalManager;
-	private trayManager: TrayManager;
 	constructor() {
 		this.logger = logger.extend("Application");
 		this.tidalManager = new TidalManager();
-		this.trayManager = new TrayManager();
 	}
 
 	private _figlet() {
@@ -24,38 +21,54 @@ export default class App {
 	}
 
 	private _init() {
-		this.trayManager.start();
 		this.logger.extend("rpcLoop")("Starting RPC Loop...");
 		this.tidalManager.rpcLoop();
-	}
-
-	private async _checkPerms() {
-		if (platform() !== "darwin") return;
-		const screenPerms = await getAuthStatus("screen");
-		if (screenPerms === ("denied" || "restricted")) {
-			this.logger.extend("Permissions")(
-				"This program doesn't have authorized perms for screen recording. Please fix that!"
-			);
-			process.exit(0);
-		}
-		this.logger.extend("Permissions")(
-			"Screen recording permissions: Authorized."
-		);
-	}
-
-	async start() {
-		debug.enable("tidalRPC:*");
-		this._figlet();
-		await this._checkPerms();
-		this._init();
 
 		setInterval(() => {
 			this.tidalManager.rpcLoop();
 		}, 1000);
 	}
-}
 
-process.on("beforeExit", () => {
-	destroyClient();
-	process.exit(0);
-});
+	private async _checkPerms() {
+		if (platform() !== "darwin") return;
+		const screenPerms = await getAuthStatus("screen");
+		if (screenPerms !== ("denied" || "restricted")) {
+			this.logger.extend("Permissions")(
+				"Screen recording permissions: Authorized."
+			);
+			return this._init();
+		}
+
+		this.logger.extend("Permissions")(
+			"This program doesn't have authorized perms for screen recording. Please fix that!"
+		);
+
+		const dialogVar = await dialog.showMessageBoxSync({
+			title: "tidalRPC",
+			message:
+				'TidalRPC doesn\'t have screen recording permissions. Click "Open System Preferences" button to add them.',
+			buttons: ["Open System Preferences", "Close program"],
+			defaultId: 0,
+			type: "error"
+		});
+
+		switch (dialogVar) {
+			case 0:
+				{
+					askForScreenCaptureAccess();
+					app.quit();
+				}
+				break;
+
+			case 1:
+				app.quit();
+				break;
+		}
+	}
+
+	async start() {
+		debug.enable("tidalRPC:*");
+		this._figlet();
+		setTimeout(async () => await this._checkPerms(), 100);
+	}
+}

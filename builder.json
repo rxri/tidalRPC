@@ -1,0 +1,29 @@
+{
+	"appId": "ririxidev.TidalRPC",
+	"productName": "tidalRPC",
+	"directories": {
+		"app": "dist",
+		"buildResources": "assets",
+		"output": "app"
+	},
+	"asar": true,
+	"dmg": {
+		"contents": [
+			{
+				"x": 110,
+				"y": 150
+			},
+			{
+				"x": 410,
+				"y": 150,
+				"type": "link",
+				"path": "/Applications"
+			}
+		],
+		"title": "Discord RPC for Tidal Desktop app"
+	},
+	"mac": {
+		"icon": "src/assets/macIcon.icns",
+		"target": "dmg"
+	}
+}
