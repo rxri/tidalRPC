@@ -46,7 +46,7 @@ export default class App {
 		const dialogVar = await dialog.showMessageBoxSync({
 			title: "tidalRPC",
 			message:
-				"Program doesn't have screen recording permissions. Please add them!",
+				'TidalRPC doesn\'t have screen recording permissions. Click "Open System Preferences" button to add them.',
 			buttons: ["Open System Preferences", "Close program"],
 			defaultId: 0,
 			type: "error"

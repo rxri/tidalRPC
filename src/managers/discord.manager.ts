@@ -1,8 +1,9 @@
 import { Client, Presence } from "discord-rpc";
-import { clientID, logger } from "../config";
 
 import Song from "@classes/song.class";
 import { formatTime } from "@util/formatTime";
+
+import { clientID, logger } from "../config";
 
 let rpcClient: discordClient;
 
@@ -63,7 +64,10 @@ export const setActivity = (data: Song) => {
 
 		const presenceData: Presence = {
 			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
-			largeImageText: data.quality === "HI_RES" ? "Tidal (MQA)" : "Tidal"
+			largeImageText:
+				data.quality === "HI_RES"
+					? `Tidal [MQA] ${String.fromCharCode(8226)} ririxi.dev/tidal`
+					: `Tidal ${String.fromCharCode(8226)} ririxi.dev/tidal`
 		};
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;

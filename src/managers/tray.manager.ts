@@ -43,7 +43,7 @@ export default class TrayManager {
 					type: "separator"
 				},
 				{
-					label: `Exit`,
+					label: "Exit",
 					role: "quit"
 				}
 			])
@@ -65,7 +65,7 @@ export default class TrayManager {
 					type: "separator"
 				},
 				{
-					label: `Exit`,
+					label: "Exit",
 					role: "quit"
 				}
 			])

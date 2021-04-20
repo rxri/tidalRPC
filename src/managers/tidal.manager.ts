@@ -8,7 +8,7 @@ import { trayManager } from "../";
 
 export default class TidalManager {
 	private api: tidalAPI;
-	currentSong: Song;
+	private currentSong: Song;
 	constructor() {
 		this.api = new tidalAPI();
 		this.currentSong = new Song();
