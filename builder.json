@@ -25,5 +25,9 @@
 	"mac": {
 		"icon": "src/assets/macIcon.icns",
 		"target": "dmg"
+	},
+	"windows": {
+		"target": "nsis",
+		"icon": "src/assets/windows.ico"
 	}
 }
