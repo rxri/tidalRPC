@@ -8,7 +8,7 @@ import App from "./app";
 
 export let trayManager: TrayManager;
 
-let singleInstanceLock = app.requestSingleInstanceLock();
+const singleInstanceLock = app.requestSingleInstanceLock();
 if (!singleInstanceLock) app.quit();
 
 app.setAppUserModelId("ririxidev.TidalRPC");
