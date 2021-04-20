@@ -1,13 +1,14 @@
-import { clearActivity, setActivity } from "@managers/discord.manager";
-
 import Process from "@classes/process.class";
 import Song from "@classes/song.class";
-import { compareTitle } from "@util/compareTitle";
 import tidalAPI from "@classes/tidalAPI.class";
+import { clearActivity, setActivity } from "@managers/discord.manager";
+import { compareTitle } from "@util/compareTitle";
+
+import { trayManager } from "../";
 
 export default class TidalManager {
 	private api: tidalAPI;
-	private currentSong: Song;
+	currentSong: Song;
 	constructor() {
 		this.api = new tidalAPI();
 		this.currentSong = new Song();
@@ -87,6 +88,7 @@ export default class TidalManager {
 
 					console.log(this.currentSong);
 
+					trayManager.update(this.currentSong);
 					return setActivity(this.currentSong);
 				}
 				break;
