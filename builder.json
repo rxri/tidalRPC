@@ -28,8 +28,8 @@
 	},
 	"mac": {
 		"icon": "src/assets/macIcon.icns",
-		"target": "dmg",
-		"artifactName": "tidalRPC.dmg",
+		"target": { "target": "default", "arch": "universal" },
+		"artifactName": "tidalRPC-mac-universal.${ext}",
 		"publish": ["github"]
 	},
 	"win": {
