@@ -1,9 +1,9 @@
+import { clearActivity, setActivity } from "@managers/discord.manager";
+
 import Process from "@classes/process.class";
 import Song from "@classes/song.class";
-import tidalAPI from "@classes/tidalAPI.class";
-import { clearActivity, setActivity } from "@managers/discord.manager";
 import { compareTitle } from "@util/compareTitle";
-
+import tidalAPI from "@classes/tidalAPI.class";
 import { trayManager } from "../";
 
 export default class TidalManager {
@@ -17,7 +17,7 @@ export default class TidalManager {
 	async rpcLoop() {
 		const tidalStatus = await (await this.getProcess()).tidalStatus;
 		if (!tidalStatus.windowTitle && tidalStatus.status === "closed")
-			return clearActivity();
+			return clearActivity(), trayManager.update();
 		switch (tidalStatus.status) {
 			case "opened":
 				{
