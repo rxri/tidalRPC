@@ -17,7 +17,7 @@ export default class TidalManager {
 	async rpcLoop() {
 		const tidalStatus = await (await this.getProcess()).tidalStatus;
 		if (!tidalStatus.windowTitle && tidalStatus.status === "closed")
-			return clearActivity(), trayManager.update();
+			return clearActivity(), this._clearCurrentSong();
 		switch (tidalStatus.status) {
 			case "opened":
 				{
@@ -93,6 +93,18 @@ export default class TidalManager {
 				}
 				break;
 		}
+	}
+
+	private _clearCurrentSong() {
+		this.currentSong.title = undefined;
+		this.currentSong.artist = undefined;
+		this.currentSong.startTime = 0;
+		this.currentSong.duration = 0;
+		this.currentSong.pausedTime = 0;
+		this.currentSong.paused = false;
+		this.currentSong.quality = "NORMAL";
+
+		trayManager.update();
 	}
 
 	private async getAuthors(
