@@ -1,12 +1,11 @@
-import debug from "debug";
-import { app, Menu, Tray } from "electron";
-import { platform } from "os";
-import { join } from "path";
+import { Menu, Tray, app } from "electron";
 
 import Song from "@classes/song.class";
-
-import { trayManager } from "../";
+import debug from "debug";
+import { join } from "path";
 import { logger } from "../config";
+import { platform } from "os";
+import { trayManager } from "../";
 
 let trayIcon: string;
 
@@ -50,26 +49,28 @@ export default class TrayManager {
 		);
 	}
 
-	update(song: Song) {
-		this.systray.setContextMenu(
-			Menu.buildFromTemplate([
-				{
-					label: "TidalRPC",
-					enabled: false
-				},
-				{
-					label: `Playing: ${song.artist} - ${song.title}`,
-					enabled: false
-				},
-				{
-					type: "separator"
-				},
-				{
-					label: "Exit",
-					role: "quit"
-				}
-			])
-		);
+	update(song?: Song) {
+		let hidelabel = false;
+		if (!song) hidelabel = true;
+		let menu = Menu.buildFromTemplate([
+			{
+				label: "TidalRPC",
+				enabled: false
+			},
+			{
+				label: `Playing: ${song?.artist} - ${song?.title}`,
+				enabled: false,
+				visible: hidelabel
+			},
+			{
+				type: "separator"
+			},
+			{
+				label: "Exit",
+				role: "quit"
+			}
+		]);
+		this.systray.setContextMenu(menu);
 	}
 }
 
