@@ -50,8 +50,6 @@ export default class TrayManager {
 	}
 
 	update(song?: Song) {
-		let hidelabel = false;
-		if (!song) hidelabel = true;
 		let menu = Menu.buildFromTemplate([
 			{
 				label: "TidalRPC",
@@ -60,7 +58,7 @@ export default class TrayManager {
 			{
 				label: `Playing: ${song?.artist} - ${song?.title}`,
 				enabled: false,
-				visible: hidelabel
+				visible: song ? false : true
 			},
 			{
 				type: "separator"
