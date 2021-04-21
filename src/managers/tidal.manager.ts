@@ -38,7 +38,14 @@ export default class TidalManager {
 				{
 					const data = tidalStatus.windowTitle?.split(" - ");
 					if (!data) return new Error("Can't get current song.");
-					if (compareTitle(data, this.currentSong)) {
+					if (
+						compareTitle(data, this.currentSong) &&
+						this.currentSong.startTime +
+							this.currentSong.duration +
+							this.currentSong.pausedTime -
+							Math.round(new Date().getTime() / 1000) >
+							0
+					) {
 						if (this.currentSong.paused) {
 							this.currentSong.paused = false;
 							return setActivity(this.currentSong);
