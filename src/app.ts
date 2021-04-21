@@ -30,7 +30,7 @@ export default class App {
 	}
 
 	private async _checkPerms() {
-		if (platform() !== "darwin") return;
+		if (platform() !== "darwin") return this._init();
 		const screenPerms = await getAuthStatus("screen");
 		if (screenPerms !== ("denied" || "restricted")) {
 			this.logger.extend("Permissions")(
@@ -67,6 +67,10 @@ export default class App {
 	}
 
 	async start() {
+		if (platform() === "linux") {
+			this.logger("TidalRPC is not designed to run on Linux distros.");
+			app.quit();
+		}
 		debug.enable("tidalRPC:*");
 		this._figlet();
 		setTimeout(async () => await this._checkPerms(), 100);

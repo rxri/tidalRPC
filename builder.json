@@ -26,7 +26,7 @@
 		"icon": "src/assets/macIcon.icns",
 		"target": "dmg"
 	},
-	"windows": {
+	"win": {
 		"target": "nsis",
 		"icon": "src/assets/windows.ico"
 	}
