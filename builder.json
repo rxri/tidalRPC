@@ -24,10 +24,12 @@
 	},
 	"mac": {
 		"icon": "src/assets/macIcon.icns",
-		"target": "dmg"
+		"target": "dmg",
+		"artifactName": "tidalRPC.dmg"
 	},
 	"win": {
 		"target": "nsis",
-		"icon": "src/assets/windows.ico"
+		"icon": "src/assets/windows.ico",
+		"artifactName": "tidalRPC-installer.exe"
 	}
 }
