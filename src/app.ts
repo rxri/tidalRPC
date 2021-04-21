@@ -3,6 +3,7 @@ import { app, dialog } from "electron";
 import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform } from "os";
+import { autoUpdater } from "electron-updater";
 
 import TidalManager from "@managers/tidal.manager";
 
@@ -18,6 +19,13 @@ export default class App {
 
 	private _figlet() {
 		console.log(textSync("tidalRPC"));
+	}
+
+	private _checkUpdates() {
+		autoUpdater.checkForUpdatesAndNotify();
+		autoUpdater.on("update-downloaded", info => {
+			autoUpdater.quitAndInstall();
+		});
 	}
 
 	private _init() {
@@ -73,6 +81,7 @@ export default class App {
 		}
 		debug.enable("tidalRPC:*");
 		this._figlet();
+		this._checkUpdates();
 		setTimeout(async () => await this._checkPerms(), 100);
 	}
 }

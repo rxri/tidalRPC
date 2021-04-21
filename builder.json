@@ -20,16 +20,22 @@
 				"path": "/Applications"
 			}
 		],
-		"title": "Discord RPC for Tidal Desktop app"
+		"title": "Discord RPC for Tidal Desktop app",
+		"writeUpdateInfo": false
+	},
+	"nsis": {
+		"differentialPackage": false
 	},
 	"mac": {
 		"icon": "src/assets/macIcon.icns",
 		"target": "dmg",
-		"artifactName": "tidalRPC.dmg"
+		"artifactName": "tidalRPC.dmg",
+		"publish": ["github"]
 	},
 	"win": {
 		"target": "nsis",
 		"icon": "src/assets/windows.ico",
-		"artifactName": "tidalRPC-installer.exe"
+		"artifactName": "tidalRPC-installer.exe",
+		"publish": ["github"]
 	}
 }

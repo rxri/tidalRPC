@@ -1,7 +1,11 @@
 {
-	"name": "tidal-rpc",
+	"name": "tidalRPC",
 	"version": "1.0.0",
 	"description": "Unofficial Discord Rich Presence for Tidal Desktop app.",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ririxidev/tidalRPC.git"
+	},
 	"license": "GPL-3.0",
 	"author": "ririxidev <mail@ririxi.dev>",
 	"main": "index.js",
@@ -9,12 +13,13 @@
 		"dev": "devScript",
 		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
 		"start": "yarn paths && electron dist/index.js",
-		"build": "electron-builder --config builder.json"
+		"build": "tsc && devScript --copyOnly && yarn paths && electron-builder --config builder.json --publish onTagOrDraft"
 	},
 	"dependencies": {
 		"axios": "^0.21.1",
 		"debug": "^4.3.1",
 		"discord-rpc": "^3.2.0",
+		"electron-updater": "^4.3.8",
 		"figlet": "^1.5.0",
 		"node-mac-permissions": "mmaietta/node-mac-permissions#misc/conditional-binding",
 		"node-window-manager": "2.2.3"
