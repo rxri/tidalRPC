@@ -58,7 +58,7 @@ export default class TrayManager {
 			{
 				label: `Playing: ${song?.artist} - ${song?.title}`,
 				enabled: false,
-				visible: song ? false : true
+				visible: song ? true : false
 			},
 			{
 				type: "separator"
