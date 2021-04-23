@@ -66,8 +66,8 @@ export const setActivity = (data: Song) => {
 			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
 			largeImageText:
 				data.quality === "HI_RES"
-					? `Tidal [MQA] ${String.fromCharCode(8226)} ririxi.dev/tidal`
-					: `Tidal ${String.fromCharCode(8226)} ririxi.dev/tidal`
+					? `Tidal [MQA] ${String.fromCharCode(8226)} tidalRPC ${app.version}`
+					: `Tidal ${String.fromCharCode(8226)} tidalRPC ${app.version}`
 		};
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;
