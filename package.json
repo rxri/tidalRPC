@@ -4,7 +4,7 @@
 	"description": "Unofficial Discord Rich Presence for Tidal Desktop app.",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/ririxidev/tidalRPC.git"
+		"url": "git://github.com/sleequid/tidalRPC.git"
 	},
 	"license": "GPL-3.0",
 	"author": "ririxidev <mail@ririxi.dev>",
