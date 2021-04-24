@@ -46,7 +46,7 @@ _Warning: macOS users need to have app in `Applications` folder to have config w
 It's super easy! Just click on `tidalRPC` tray icon and go to `Settings` submenu!
 
 # Why there is no Album artwork on Rich Presence?!?!
-Due to Discord limitations, I'm not going to implement workaround to do it. It's very risky since discord is banning most of people that are acting as "self-bot" and it would need your Authorization token to upload assets. Due to it I don't want anyone banned using our program, it's not going to happen.
+Due to Discord limitations, I'm not going to implement workaround to do it. It's very risky since discord is banning most of people that are acting as "self-bot" and it would need your Authorization token to upload assets. Due to it I don't want anyone to be banned using our program so, it's not going to happen.
 
 
 ---
