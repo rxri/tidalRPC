@@ -6,7 +6,7 @@
 - Cross-platform (Windows, macOS).
 - Super fast.
 - Tray that shows you actually playing song and option to close program!
-- Settings
+- Settings to disable some features.
 - Coded in TypeScript.
 
 ## Supported OS
