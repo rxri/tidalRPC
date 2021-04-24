@@ -1,11 +1,13 @@
-import { Menu, Tray, app } from "electron";
+import debug from "debug";
+import { app, Menu, Tray } from "electron";
+import { platform } from "os";
+import { join } from "path";
 
 import Song from "@classes/song.class";
-import debug from "debug";
-import { join } from "path";
-import { logger } from "../config";
-import { platform } from "os";
+import { store } from "@util/config";
+
 import { trayManager } from "../";
+import { logger } from "../config";
 
 let trayIcon: string;
 
@@ -16,9 +18,6 @@ switch (platform()) {
 	case "win32":
 		trayIcon = join(__dirname, "../assets/windows.ico");
 		break;
-	default:
-		trayIcon = join(__dirname, "../assets/macos.png");
-		break;
 }
 
 export default class TrayManager {
@@ -28,18 +27,43 @@ export default class TrayManager {
 		this.systray = new Tray(trayIcon);
 		this.logger = logger.extend("TrayManager");
 
-		this.systray.setToolTip("tidalRPC");
-	}
-
-	start() {
 		this.systray.setContextMenu(
 			Menu.buildFromTemplate([
 				{
-					label: "TidalRPC",
+					label: `TidalRPC ${app.getVersion()}`,
 					enabled: false
 				},
 				{
 					type: "separator"
+				},
+				{
+					label: "Settings",
+					submenu: [
+						{
+							label: "Show Rich Presence",
+							type: "checkbox",
+							checked: store.get("showPresence"),
+							click: () => {
+								store.set("showPresence", !store.get("showPresence"));
+							}
+						},
+						{
+							label: "Show AppName in Rich Presence",
+							type: "checkbox",
+							checked: store.get("showAppName"),
+							click: () => {
+								store.set("showAppName", !store.get("showAppName"));
+							}
+						},
+						{
+							label: "Show Buttons in Rich Presence",
+							type: "checkbox",
+							checked: store.get("showButtons"),
+							click: () => {
+								store.set("showButtons", !store.get("showButtons"));
+							}
+						}
+					]
 				},
 				{
 					label: "Exit",
@@ -47,12 +71,14 @@ export default class TrayManager {
 				}
 			])
 		);
+
+		this.systray.setToolTip("tidalRPC");
 	}
 
 	update(song?: Song) {
-		let menu = Menu.buildFromTemplate([
+		const menu = Menu.buildFromTemplate([
 			{
-				label: "TidalRPC",
+				label: `TidalRPC ${app.getVersion()}`,
 				enabled: false
 			},
 			{
@@ -62,6 +88,35 @@ export default class TrayManager {
 			},
 			{
 				type: "separator"
+			},
+			{
+				label: "Settings",
+				submenu: [
+					{
+						label: "Show Rich Presence",
+						type: "checkbox",
+						checked: store.get("showPresence"),
+						click: () => {
+							store.set("showPresence", !store.get("showPresence"));
+						}
+					},
+					{
+						label: "Show AppName in Rich Presence",
+						type: "checkbox",
+						checked: store.get("showAppName"),
+						click: () => {
+							store.set("showAppName", !store.get("showAppName"));
+						}
+					},
+					{
+						label: "Show Buttons in Rich Presence",
+						type: "checkbox",
+						checked: store.get("showButtons"),
+						click: () => {
+							store.set("showButtons", !store.get("showButtons"));
+						}
+					}
+				]
 			},
 			{
 				label: "Exit",

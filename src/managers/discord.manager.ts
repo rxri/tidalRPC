@@ -1,6 +1,8 @@
 import { Client, Presence } from "discord-rpc";
+import { app } from "electron";
 
 import Song from "@classes/song.class";
+import { store } from "@util/config";
 import { formatTime } from "@util/formatTime";
 
 import { clientID, logger } from "../config";
@@ -66,8 +68,16 @@ export const setActivity = (data: Song) => {
 			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
 			largeImageText:
 				data.quality === "HI_RES"
-					? `Tidal [MQA] ${String.fromCharCode(8226)} tidalRPC ${app.version}`
-					: `Tidal ${String.fromCharCode(8226)} tidalRPC ${app.version}`
+					? `Tidal [MQA] ${
+							store.get("showAppName")
+								? `${String.fromCharCode(8226)} tidalRPC ${app.getVersion()}`
+								: ""
+					  }`
+					: `Tidal ${
+							store.get("showAppName")
+								? `${String.fromCharCode(8226)} tidalRPC ${app.getVersion()}`
+								: ""
+					  }`
 		};
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;
@@ -80,7 +90,7 @@ export const setActivity = (data: Song) => {
 		presenceData.smallImageKey = data.paused ? "pause" : "play";
 		presenceData.smallImageText = data.paused ? "Paused" : "Playing";
 
-		if (data.buttons && data.buttons.length !== 0)
+		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons"))
 			presenceData.buttons = data.buttons;
 
 		if (data.paused && presenceData.endTimestamp)

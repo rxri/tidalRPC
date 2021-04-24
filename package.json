@@ -1,6 +1,6 @@
 {
 	"name": "tidalRPC",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Unofficial Discord Rich Presence for Tidal Desktop app.",
 	"repository": {
 		"type": "git",
@@ -19,6 +19,7 @@
 		"axios": "^0.21.1",
 		"debug": "^4.3.1",
 		"discord-rpc": "^3.2.0",
+		"electron-store": "^8.0.0",
 		"electron-updater": "^4.3.8",
 		"figlet": "^1.5.0",
 		"node-mac-permissions": "mmaietta/node-mac-permissions#misc/conditional-binding",

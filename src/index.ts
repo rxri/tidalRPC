@@ -14,7 +14,6 @@ if (!singleInstanceLock) app.quit();
 app.setAppUserModelId("ririxidev.TidalRPC");
 app.whenReady().then(async () => {
 	trayManager = new TrayManager();
-	trayManager.start();
 
 	if (platform() === "darwin") app.dock.hide();
 
