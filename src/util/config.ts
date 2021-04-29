@@ -4,12 +4,16 @@ interface configType {
 	showPresence: boolean;
 	showAppName: boolean;
 	showButtons: boolean;
+	showAlbum: boolean;
+	autoStart: boolean;
 }
 
 export const store = new Store<configType>({
 	defaults: {
 		showPresence: true,
 		showAppName: true,
-		showButtons: true
+		showButtons: true,
+		showAlbum: true,
+		autoStart: true
 	}
 });

@@ -3,6 +3,7 @@ import { platform } from "os";
 
 import { destroyClient } from "@managers/discord.manager";
 import TrayManager from "@managers/tray.manager";
+import { store } from "@util/config";
 
 import App from "./app";
 
@@ -16,6 +17,15 @@ app.whenReady().then(async () => {
 	trayManager = new TrayManager();
 
 	if (platform() === "darwin") app.dock.hide();
+	if (
+		app.isPackaged &&
+		store.get("autoStart") &&
+		!app.getLoginItemSettings().openAtLogin
+	)
+		app.setLoginItemSettings({
+			openAtLogin: true,
+			openAsHidden: true
+		});
 
 	const Application = new App();
 	Application.start();

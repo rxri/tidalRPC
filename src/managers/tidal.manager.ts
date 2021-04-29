@@ -74,6 +74,10 @@ export default class TidalManager {
 
 					this.currentSong.artist = await this.getAuthors(getInfo[0].artists);
 					this.currentSong.title = getInfo[0].title;
+					this.currentSong.album = {
+						name: getAlbumInfo.title,
+						year: new Date(getAlbumInfo.releaseDate).getUTCFullYear()
+					};
 					this.currentSong.duration = getInfo[0].duration;
 					this.currentSong.quality = getInfo[0].audioQuality;
 					this.currentSong.startTime = 0;
@@ -84,13 +88,13 @@ export default class TidalManager {
 
 					if (getInfo[0].url)
 						this.currentSong.buttons?.push({
-							label: "Listen along!",
+							label: "Listen Along!",
 							url: getInfo[0].url
 						});
 
-					if (getAlbumInfo)
+					if (getAlbumInfo.url)
 						this.currentSong.buttons?.push({
-							label: "View Album",
+							label: "Visit Album",
 							url: getAlbumInfo.url
 						});
 
@@ -107,6 +111,7 @@ export default class TidalManager {
 	private _clearCurrentSong() {
 		this.currentSong.title = undefined;
 		this.currentSong.artist = undefined;
+		this.currentSong.album = undefined;
 		this.currentSong.startTime = 0;
 		this.currentSong.duration = 0;
 		this.currentSong.pausedTime = 0;

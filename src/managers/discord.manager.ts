@@ -86,7 +86,13 @@ export const setActivity = (data: Song) => {
 				data.startTime + data.duration + data.pausedTime;
 
 		presenceData.state = data.artist;
-		presenceData.details = data.title;
+		presenceData.details =
+			data.title +
+			`${
+				data.album && store.get("showAlbum")
+					? ` • ${data.album.name} (${data.album.year})`
+					: ""
+			}`;
 		presenceData.smallImageKey = data.paused ? "pause" : "play";
 		presenceData.smallImageText = data.paused ? "Paused" : "Playing";
 

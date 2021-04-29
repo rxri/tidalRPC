@@ -1,9 +1,9 @@
 import debug from "debug";
 import { app, dialog } from "electron";
+import { autoUpdater } from "electron-updater";
 import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform } from "os";
-import { autoUpdater } from "electron-updater";
 
 import TidalManager from "@managers/tidal.manager";
 
@@ -23,7 +23,7 @@ export default class App {
 
 	private _checkUpdates() {
 		autoUpdater.checkForUpdatesAndNotify();
-		autoUpdater.on("update-downloaded", info => {
+		autoUpdater.on("update-downloaded", () => {
 			autoUpdater.quitAndInstall();
 		});
 	}

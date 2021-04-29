@@ -143,6 +143,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/auto-launch@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@types/auto-launch@npm:5.0.1"
+  checksum: 6b833513bf1cb3464477ef7efcf2ca3541527fe3ca704d3122f2099f1a0607a061ee038fc12ca2c8c536f9ae5e1476776492b3781624480c86bf8140c7ccdbd9
+  languageName: node
+  linkType: hard
+
 "@types/axios@npm:^0.14.0":
   version: 0.14.0
   resolution: "@types/axios@npm:0.14.0"
@@ -4686,6 +4693,7 @@ resolve@^1.20.0:
   version: 0.0.0-use.local
   resolution: "tidalRPC@workspace:."
   dependencies:
+    "@types/auto-launch": ^5.0.1
     "@types/axios": ^0.14.0
     "@types/debug": ^4.1.5
     "@types/discord-rpc": ^3.0.5

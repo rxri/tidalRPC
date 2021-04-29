@@ -1,6 +1,7 @@
 export default class Song {
 	title: string | undefined;
 	artist: string | undefined;
+	album: { name: string; year: number } | undefined;
 	startTime: number;
 	duration: number;
 	pausedTime: number;

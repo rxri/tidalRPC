@@ -43,25 +43,43 @@ export default class TrayManager {
 							label: "Show Rich Presence",
 							type: "checkbox",
 							checked: store.get("showPresence"),
-							click: () => {
-								store.set("showPresence", !store.get("showPresence"));
-							}
+							click: () => store.set("showPresence", !store.get("showPresence"))
 						},
 						{
 							label: "Show AppName in Rich Presence",
 							type: "checkbox",
 							checked: store.get("showAppName"),
+							click: () => store.set("showAppName", !store.get("showAppName"))
+						},
+						{
+							label: "Start at System Startup",
+							type: "checkbox",
+							checked: store.get("autoStart"),
+							enabled: app.isPackaged ? true : false,
 							click: () => {
-								store.set("showAppName", !store.get("showAppName"));
+								store.set("autoStart", !store.get("autoStart"));
+								store.get("autoStart") && app.isPackaged
+									? app.setLoginItemSettings({ openAtLogin: true })
+									: app.setLoginItemSettings({ openAtLogin: false });
 							}
 						},
 						{
-							label: "Show Buttons in Rich Presence",
-							type: "checkbox",
-							checked: store.get("showButtons"),
-							click: () => {
-								store.set("showButtons", !store.get("showButtons"));
-							}
+							label: "Song",
+							submenu: [
+								{
+									label: "Show Album with Year in Rich Presence",
+									type: "checkbox",
+									checked: store.get("showAlbum"),
+									click: () => store.set("showAlbum", !store.get("showAlbum"))
+								},
+								{
+									label: "Show Buttons in Rich Presence",
+									type: "checkbox",
+									checked: store.get("showButtons"),
+									click: () =>
+										store.set("showButtons", !store.get("showButtons"))
+								}
+							]
 						}
 					]
 				},
@@ -96,25 +114,45 @@ export default class TrayManager {
 						label: "Show Rich Presence",
 						type: "checkbox",
 						checked: store.get("showPresence"),
-						click: () => {
-							store.set("showPresence", !store.get("showPresence"));
-						}
+						click: () => store.set("showPresence", !store.get("showPresence"))
 					},
 					{
 						label: "Show AppName in Rich Presence",
 						type: "checkbox",
 						checked: store.get("showAppName"),
+						click: () => store.set("showAppName", !store.get("showAppName"))
+					},
+					{
+						label: "Start at System Startup",
+						type: "checkbox",
+						checked: store.get("autoStart"),
+						enabled: app.isPackaged ? true : false,
 						click: () => {
-							store.set("showAppName", !store.get("showAppName"));
+							store.set("autoStart", !store.get("autoStart"));
+							store.get("autoStart") && app.isPackaged
+								? app.setLoginItemSettings({
+										openAtLogin: true,
+										openAsHidden: true
+								  })
+								: app.setLoginItemSettings({ openAtLogin: false });
 						}
 					},
 					{
-						label: "Show Buttons in Rich Presence",
-						type: "checkbox",
-						checked: store.get("showButtons"),
-						click: () => {
-							store.set("showButtons", !store.get("showButtons"));
-						}
+						label: "Song",
+						submenu: [
+							{
+								label: "Show Album with Year in Rich Presence",
+								type: "checkbox",
+								checked: store.get("showAlbum"),
+								click: () => store.set("showAlbum", !store.get("showAlbum"))
+							},
+							{
+								label: "Show Buttons in Rich Presence",
+								type: "checkbox",
+								checked: store.get("showButtons"),
+								click: () => store.set("showButtons", !store.get("showButtons"))
+							}
+						]
 					}
 				]
 			},
