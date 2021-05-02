@@ -8,13 +8,10 @@ export default class Process {
 		this.tidalStatus = { status: "closed", windowTitle: null };
 	}
 
-	async getTidalTitle(): Promise<void> {
-		const data = await this.getProcessList();
+	async getTidalTitle(): Promise<string | void> {
+		const data = await this._getProcessList();
 
-		if (!data) {
-			this.tidalStatus.status = "closed";
-			return;
-		}
+		if (!data) return (this.tidalStatus.status = "closed");
 
 		data.map(async window => {
 			const windowTitle = window.getTitle();
@@ -26,20 +23,21 @@ export default class Process {
 					windowTitle.includes("Default IME") ||
 					windowTitle.includes("MediaPlayer SMTC window")
 				)
-			) {
-				this.tidalStatus.status = "opened";
-				this.tidalStatus.windowTitle = windowTitle;
-			}
+			)
+				return (
+					(this.tidalStatus.status = "opened"),
+					(this.tidalStatus.windowTitle = windowTitle)
+				);
 		});
 
 		if (
 			this.tidalStatus.windowTitle &&
 			this.titleRegex.test(this.tidalStatus.windowTitle)
 		)
-			this.tidalStatus.status = "playing";
+			return (this.tidalStatus.status = "playing");
 	}
 
-	private async getProcessList(): Promise<Window[] | null> {
+	private async _getProcessList(): Promise<Window[] | null> {
 		const data = await windowManager
 			.getWindows()
 			.filter(window => window.path.includes("TIDAL"));

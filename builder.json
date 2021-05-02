@@ -3,7 +3,7 @@
 	"productName": "tidalRPC",
 	"directories": {
 		"app": "dist",
-		"buildResources": "assets",
+		"buildResources": "src/assets",
 		"output": "app"
 	},
 	"asar": true,

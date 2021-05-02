@@ -1,4 +1,4 @@
-import Song from "@classes/song.class";
+import Song from "@classes/song";
 
 export const compareTitle = (data: string[], currentSong: Song): boolean => {
 	if (data[1] === currentSong.artist && data[0] === currentSong.title)

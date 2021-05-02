@@ -1,8 +1,8 @@
 import { app } from "electron";
 import { platform } from "os";
 
-import { destroyClient } from "@managers/discord.manager";
-import TrayManager from "@managers/tray.manager";
+import { destroyClient } from "@managers/discordManager";
+import TrayManager from "@managers/trayManager";
 import { store } from "@util/config";
 
 import App from "./app";
@@ -15,6 +15,7 @@ if (!singleInstanceLock) app.quit();
 app.setAppUserModelId("ririxidev.TidalRPC");
 app.whenReady().then(async () => {
 	trayManager = new TrayManager();
+	trayManager.update();
 
 	if (platform() === "darwin") app.dock.hide();
 	if (

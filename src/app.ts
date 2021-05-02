@@ -5,7 +5,7 @@ import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform } from "os";
 
-import TidalManager from "@managers/tidal.manager";
+import TidalManager from "@managers/tidalManager";
 
 import { logger } from "./config";
 
@@ -75,10 +75,11 @@ export default class App {
 	}
 
 	async start() {
-		if (platform() === "linux") {
-			this.logger("TidalRPC is not designed to run on Linux distros.");
-			app.quit();
-		}
+		if (platform() === "linux")
+			return (
+				this.logger("TidalRPC is not designed to run on Linux distros."),
+				app.quit()
+			);
 		debug.enable("tidalRPC:*");
 		this._figlet();
 		this._checkUpdates();

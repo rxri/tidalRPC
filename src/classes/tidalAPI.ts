@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-export default class tidalAPI {
+export default class TidalAPI {
 	private baseURL: string;
 	private webToken: string;
 	private headers: requestHeaders;

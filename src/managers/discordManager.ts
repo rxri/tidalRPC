@@ -1,15 +1,15 @@
 import { Client, Presence } from "discord-rpc";
 import { app } from "electron";
 
-import Song from "@classes/song.class";
+import Song from "@classes/song";
 import { store } from "@util/config";
 import { formatTime } from "@util/formatTime";
 
 import { clientID, logger } from "../config";
 
-let rpcClient: discordClient;
+let rpcClient: DiscordClient;
 
-class discordClient {
+class DiscordClient {
 	clientId: string;
 	private client: Client;
 	private ready: boolean = false;
@@ -69,14 +69,10 @@ export const setActivity = (data: Song) => {
 			largeImageText:
 				data.quality === "HI_RES"
 					? `Tidal [MQA] ${
-							store.get("showAppName")
-								? `${String.fromCharCode(8226)} tidalRPC ${app.getVersion()}`
-								: ""
+							store.get("showAppName") ? `• tidalRPC ${app.getVersion()}` : ""
 					  }`
 					: `Tidal ${
-							store.get("showAppName")
-								? `${String.fromCharCode(8226)} tidalRPC ${app.getVersion()}`
-								: ""
+							store.get("showAppName") ? `• tidalRPC ${app.getVersion()}` : ""
 					  }`
 		};
 
@@ -112,7 +108,7 @@ export const setActivity = (data: Song) => {
 		);
 
 		if (!rpcClient) {
-			rpcClient = new discordClient(clientID);
+			rpcClient = new DiscordClient(clientID);
 			rpcClient.actualPresence = presenceData;
 		} else rpcClient.setActivity(presenceData);
 	},

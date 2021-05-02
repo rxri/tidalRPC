@@ -1,22 +1,22 @@
-import Process from "@classes/process.class";
-import Song from "@classes/song.class";
-import tidalAPI from "@classes/tidalAPI.class";
-import { clearActivity, setActivity } from "@managers/discord.manager";
+import Process from "@classes/process";
+import Song from "@classes/song";
+import TidalAPI from "@classes/tidalAPI";
+import { clearActivity, setActivity } from "@managers/discordManager";
 import { compareTitle } from "@util/compareTitle";
 import { store } from "@util/config";
 
 import { trayManager } from "../";
 
 export default class TidalManager {
-	private api: tidalAPI;
+	private api: TidalAPI;
 	private currentSong: Song;
 	constructor() {
-		this.api = new tidalAPI();
+		this.api = new TidalAPI();
 		this.currentSong = new Song();
 	}
 
 	async rpcLoop() {
-		const tidalStatus = await (await this.getProcess()).tidalStatus;
+		const tidalStatus = await (await this._getTidalProcess()).tidalStatus;
 		if (!tidalStatus.windowTitle && tidalStatus.status === "closed")
 			return clearActivity(), this._clearCurrentSong();
 		switch (tidalStatus.status) {
@@ -72,7 +72,7 @@ export default class TidalManager {
 					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
 						timeNow = Math.round(new Date().getTime() / 1000);
 
-					this.currentSong.artist = await this.getAuthors(getInfo[0].artists);
+					this.currentSong.artist = await this._getAuthors(getInfo[0].artists);
 					this.currentSong.title = getInfo[0].title;
 					this.currentSong.album = {
 						name: getAlbumInfo.title,
@@ -121,7 +121,7 @@ export default class TidalManager {
 		trayManager.update();
 	}
 
-	private async getAuthors(
+	private async _getAuthors(
 		res: [{ id: number; name: string; type: "string"; picture: string | null }]
 	) {
 		let authorString;
@@ -136,7 +136,7 @@ export default class TidalManager {
 		return authorString;
 	}
 
-	private async getProcess(): Promise<Process> {
+	private async _getTidalProcess(): Promise<Process> {
 		const proc = new Process();
 		await proc.getTidalTitle();
 

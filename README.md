@@ -2,17 +2,17 @@
 
 ## Features
 
-- Single executable binary (macOS feature+)
+- Single executable binary (macOS feature).
 - Cross-platform (Windows, macOS).
 - Super fast.
-- Tray that shows you actually playing song and option to close program!
-- Settings to disable some features.
+- Tray settings.
+- AutoStart.
 - Coded in TypeScript.
 
 ## Supported OS
 
 - Windows
-- macOS (High Sierra+)
+- macOS High Sierra+ (10.13.4+)
 
 ## Screenshots
 
@@ -35,19 +35,15 @@ App has implemented settings that you can use to disable/enable some features.
 
 **_All changes are applied on new song!_**
 
-- You can disable showing `Rich Presence` on discord.
-- You can disable showing `App Name` (tidalRPC) on discord.
-- You can disable showing `Buttons` on discord.
-
 _Warning: macOS users need to have app in `Applications` folder to have config working properly._
 
-### How to access it?
+### How to access them?
 
 It's super easy! Just click on `tidalRPC` tray icon and go to `Settings` submenu!
 
-# Why there is no Album artwork on Rich Presence?!?!
-Due to Discord limitations, I'm not going to implement workaround to do it. It's very risky since discord is banning most of people that are acting as "self-bot" and it would need your Authorization token to upload assets. Due to it I don't want anyone to be banned using our program so, it's not going to happen.
+## Why there is no Album artwork on Rich Presence?!?!
 
+Due to Discord limitations, I'm not going to implement workaround to do it. It's very risky since discord is banning most of people that are acting as "self-bot" and it would need your Authorization token to upload assets. Due to it I don't want anyone to be banned using our program so, it's not going to happen.
 
 ---
 
