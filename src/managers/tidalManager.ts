@@ -63,30 +63,30 @@ export default class TidalManager {
 
 					getInfo.find((song: { audioQuality: string; title: string }) => {
 						if (song.audioQuality === "HI_RES" && song.title === data[0]) {
-							return (getInfo = [song]);
+							return (getInfo = song);
 						}
 
-						if (song.title === data[0]) getInfo = [song];
+						if (song.title === data[0]) getInfo = song;
 					});
 
-					const getAlbumInfo = await this.api.getAlbumById(getInfo[0].album.id),
+					const getAlbumInfo = await this.api.getAlbumById(getInfo.album.id),
 						timeNow = Math.round(new Date().getTime() / 1000);
 
-					this.currentSong.artist = await this._getAuthors(getInfo[0].artists);
-					this.currentSong.title = getInfo[0].title;
+					this.currentSong.artist = await this._getAuthors(getInfo.artists);
+					this.currentSong.title = getInfo.title;
 					this.currentSong.album = {
 						name: getAlbumInfo.title,
 						year: new Date(getAlbumInfo.releaseDate).getUTCFullYear()
 					};
-					this.currentSong.duration = getInfo[0].duration;
-					this.currentSong.quality = getInfo[0].audioQuality;
+					this.currentSong.duration = getInfo.duration;
+					this.currentSong.quality = getInfo.audioQuality;
 					this.currentSong.startTime = 0;
 					this.currentSong.pausedTime = 0;
 					this.currentSong.paused = false;
 					this.currentSong.startTime = timeNow;
 					this.currentSong.buttons = [];
 
-					if (getInfo[0].id)
+					if (getInfo.id)
 						this.currentSong.buttons?.push({
 							label: "Listen Along",
 							url: `tidal://track/${getInfo[0].id}`
