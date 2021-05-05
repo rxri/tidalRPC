@@ -86,10 +86,10 @@ export default class TidalManager {
 					this.currentSong.startTime = timeNow;
 					this.currentSong.buttons = [];
 
-					if (getInfo[0].url)
+					if (getInfo[0].id)
 						this.currentSong.buttons?.push({
 							label: "Listen Along",
-							url: getInfo[0].url
+							url: `tidal://track/${getInfo[0].id}`
 						});
 
 					if (getAlbumInfo.url)
