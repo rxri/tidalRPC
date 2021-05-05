@@ -89,7 +89,7 @@ export default class TidalManager {
 					if (getInfo.id)
 						this.currentSong.buttons?.push({
 							label: "Listen Along",
-							url: `tidal://track/${getInfo[0].id}`
+							url: `tidal://track/${getInfo.id}`
 						});
 
 					if (getAlbumInfo.url)
