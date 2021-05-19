@@ -1,4 +1,9 @@
-# Unofficial Tidal Rich Presence
+<img src="https://user-images.githubusercontent.com/9348108/118810281-fa1c2900-b8ab-11eb-853c-868512cc57cb.png" align="left"></img>
+
+<h1>Tidal Rich Presence <code>--unofficial</code></h1>
+Discord Rich Presence for Tidal Desktop Application!
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
 
 ## Features
 
