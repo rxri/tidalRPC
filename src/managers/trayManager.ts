@@ -4,6 +4,7 @@ import { platform } from "os";
 import { join } from "path";
 
 import Song from "@classes/song";
+import { rpcClient } from "@managers/discordManager";
 import { store } from "@util/config";
 
 import { trayManager } from "../";
@@ -64,10 +65,17 @@ export default class TrayManager {
 						label: "Show Rich Presence",
 						type: "checkbox",
 						checked: store.get("showPresence"),
-						click: () => store.set("showPresence", !store.get("showPresence"))
+						click: () => {
+							store.set("showPresence", !store.get("showPresence"));
+							if (
+								typeof rpcClient !== "undefined" &&
+								!store.get("showPresence")
+							)
+								rpcClient.clearActivity();
+						}
 					},
 					{
-						label: "Rich Presence",
+						label: "More Rich Presence settings",
 						submenu: [
 							{
 								label: "Show Album Name in Rich Presence",

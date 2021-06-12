@@ -5,7 +5,9 @@ import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform } from "os";
 
+import { LoginManager } from "@managers/loginManager";
 import TidalManager from "@managers/tidalManager";
+import { store } from "@util/config";
 
 import { logger } from "./config";
 
@@ -15,6 +17,19 @@ export default class App {
 	constructor() {
 		this.logger = logger.extend("Application");
 		this.tidalManager = new TidalManager();
+	}
+
+	async start() {
+		debug.enable("tidalRPC:*");
+		if (platform() === "linux") {
+			return (
+				this.logger("TidalRPC is not designed to run on Linux distros."),
+				app.quit()
+			);
+		}
+		this._figlet();
+		this._checkUpdates();
+		setTimeout(async () => await this._checkPerms(), 100);
 	}
 
 	private _figlet() {
@@ -37,14 +52,81 @@ export default class App {
 		}, 1000);
 	}
 
+	private async _askForLogin() {
+		if (store.get("noLoginPopup")) return this._init();
+		const loginManager = new LoginManager(),
+			dialogVar = await dialog.showMessageBoxSync({
+				title: "tidalRPC",
+				message:
+					"You can use your own Tidal account to get better results for your song! Do you want to login?",
+				buttons: ["Yes!", "No (don't show again)"],
+				defaultId: 0,
+				type: "info"
+			});
+
+		switch (dialogVar) {
+			case 0:
+				{
+					await loginManager.loginToTidal().then(
+						async res => {
+							store.set("tidalToken", res);
+							store.set("noLoginPopup", true);
+						},
+						async err => {
+							const dialogVar = await dialog.showMessageBoxSync({
+								title: "tidalRPC",
+								message:
+									"There was issue with login to your account. Do you want to try again?",
+								buttons: ["Yes!", "No (don't show again)"],
+								defaultId: 0,
+								type: "error"
+							});
+
+							switch (dialogVar) {
+								case 0:
+									{
+										await loginManager.loginToTidal().then(
+											async res => {
+												store.set("tidalToken", res);
+												store.set("noLoginPopup", true);
+											},
+											async () => {
+												store.set("noLoginPopup", true);
+											}
+										);
+									}
+									break;
+
+								case 1:
+									{
+										store.set("noLoginPopup", true);
+									}
+									break;
+							}
+						}
+					);
+				}
+				break;
+
+			case 1:
+				{
+					store.set("noLoginPopup", true);
+				}
+				break;
+		}
+
+		return this._init();
+	}
+
 	private async _checkPerms() {
-		if (platform() !== "darwin") return this._init();
+		console.log(store.get("tidalToken"));
+		if (platform() !== "darwin") return this._askForLogin();
 		const screenPerms = await getAuthStatus("screen");
 		if (screenPerms !== ("denied" || "restricted")) {
 			this.logger.extend("Permissions")(
 				"Screen recording permissions: Authorized."
 			);
-			return this._init();
+			return this._askForLogin();
 		}
 
 		this.logger.extend("Permissions")(
@@ -54,7 +136,7 @@ export default class App {
 		const dialogVar = await dialog.showMessageBoxSync({
 			title: "tidalRPC",
 			message:
-				'TidalRPC doesn\'t have screen recording permissions. Click "Open System Preferences" button to add them.',
+				"TidalRPC doesn't have screen recording permissions. Click 'Open System Preferences' button to add them.",
 			buttons: ["Open System Preferences", "Close program"],
 			defaultId: 0,
 			type: "error"
@@ -72,17 +154,5 @@ export default class App {
 				app.quit();
 				break;
 		}
-	}
-
-	async start() {
-		if (platform() === "linux")
-			return (
-				this.logger("TidalRPC is not designed to run on Linux distros."),
-				app.quit()
-			);
-		debug.enable("tidalRPC:*");
-		this._figlet();
-		this._checkUpdates();
-		setTimeout(async () => await this._checkPerms(), 100);
 	}
 }

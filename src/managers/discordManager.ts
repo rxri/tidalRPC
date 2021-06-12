@@ -7,7 +7,7 @@ import { formatTime } from "@util/formatTime";
 
 import { clientID, logger } from "../config";
 
-let rpcClient: DiscordClient;
+export let rpcClient: DiscordClient;
 
 class DiscordClient {
 	clientId: string;

@@ -3,11 +3,11 @@ export const formatTime = (time: number) => {
 	const mins = Math.floor((time % 3600) / 60);
 	const secs = Math.floor(time % 60);
 
-	let ret = "";
+	let formattedTime = "";
 	if (hrs > 0) {
-		ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+		formattedTime += "" + hrs + ":" + (mins < 10 ? "0" : "");
 	}
-	ret += "" + mins + ":" + (secs < 10 ? "0" : "");
-	ret += "" + secs;
-	return ret;
+	formattedTime += "" + mins + ":" + (secs < 10 ? "0" : "");
+	formattedTime += "" + secs;
+	return formattedTime;
 };

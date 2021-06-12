@@ -6,6 +6,9 @@ interface configType {
 	showButtons: boolean;
 	showAlbum: boolean;
 	autoStart: boolean;
+	tidalToken: string | null;
+	noLoginPopup: boolean;
+	countryUserCode: string | null;
 }
 
 export const store = new Store<configType>({
@@ -14,6 +17,9 @@ export const store = new Store<configType>({
 		showAppName: true,
 		showButtons: true,
 		showAlbum: true,
-		autoStart: true
+		autoStart: true,
+		tidalToken: null,
+		noLoginPopup: false,
+		countryUserCode: null
 	}
 });
