@@ -42,5 +42,6 @@
 		"icon": "src/assets/windows.ico",
 		"artifactName": "tidalRPC-installer.exe",
 		"publish": ["github"]
-	}
+	},
+	"npmRebuild": false
 }
