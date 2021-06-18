@@ -1,83 +1,141 @@
 import axios, { AxiosInstance } from "axios";
 import { app, BrowserWindow } from "electron";
 import { platform } from "os";
+import { stringify } from "qs";
 
 import { store } from "@util/config";
 
 export class LoginManager {
 	private window: BrowserWindow;
 	private axios: AxiosInstance;
-	authorizationToken: null | string;
+	token: {
+		authorizationToken: string | null;
+		refreshToken: string | null;
+	};
 	constructor() {
 		this.window = new BrowserWindow({ show: false });
-		this.authorizationToken = null;
+		this.token = { authorizationToken: null, refreshToken: null };
 		this.axios = axios.create({ baseURL: "https://login.tidal.com/oauth2" });
 	}
 
 	async loginToTidal() {
 		this.window.show();
 		if (platform() === "darwin") app.dock.show();
-		return new Promise<string | null>(async (resolve, reject) => {
+		return new Promise<{
+			authorizationToken: string;
+			refreshToken: string;
+		}>(async (resolve, reject) => {
 			this.window.webContents.session.clearStorageData();
 			await this.window.loadURL("https://listen.tidal.com");
 
-			setTimeout(async () => {
-				await this.window.webContents.executeJavaScript(
-					`document.querySelector('[datatest="no-user--signup"]').click()`
-				);
-			}, 2400);
+			try {
+				setTimeout(async () => {
+					await this.window.webContents.executeJavaScript(
+						`document.querySelector('[datatest="no-user--signup"]').click()`
+					);
+				}, 2400);
+			} catch (err) {
+				//* User already clicked this button.
+			}
 
-			this.window.webContents.session.webRequest.onSendHeaders(
-				{ urls: ["https://login.tidal.com/*"] },
-				details => {
-					if (
-						details.url !== "https://login.tidal.com/oauth2/me" &&
-						details.method !== "GET"
-					)
-						return;
-					return (this.authorizationToken =
-						details.requestHeaders["authorization"]);
+			this.window.webContents.debugger.attach("1.3");
+			this.window.webContents.debugger.on(
+				"message",
+				async (_, method, params) => {
+					if (method === "Network.responseReceived") {
+						if (params.response.url !== "https://login.tidal.com/oauth2/token")
+							return;
+						const res = await this.window.webContents.debugger.sendCommand(
+								"Network.getResponseBody",
+								{
+									requestId: params.requestId
+								}
+							),
+							responseBody = JSON.parse(res.body);
+
+						delete responseBody.user; //* We don't really need it so why 🤷‍♀️
+						this.token.authorizationToken = `Bearer ${responseBody.access_token}`;
+						this.token.refreshToken = responseBody.refresh_token;
+						await setTimeout(() => this.window.close(), 2000);
+						if (platform() === "darwin") app.dock.hide();
+					}
 				}
 			);
 
-			this.window.webContents.session.webRequest.onCompleted(
-				{ urls: ["https://login.tidal.com/*"] },
-				async details => {
-					if (details.url !== "https://login.tidal.com/oauth2/me") return;
-					if (details.method !== "GET") return;
-
-					setTimeout(() => this.window.close(), 2000);
-					if (platform() === "darwin") app.dock.hide();
-				}
-			);
+			this.window.webContents.debugger.sendCommand("Network.enable");
 
 			this.window.on("close", async () => {
 				this.window = new BrowserWindow({ show: false });
-				if (this.authorizationToken) resolve(this.authorizationToken);
-				else setTimeout(() => reject(new Error("NO_TOKEN")), 1000);
+				if (this.token.authorizationToken && this.token.refreshToken) {
+					resolve({
+						authorizationToken: this.token.authorizationToken,
+						refreshToken: this.token.refreshToken
+					});
+				} else setTimeout(() => reject(new Error("NO_TOKEN")), 1000);
 			});
 		});
 	}
 
-	async checkAuthorizationToken(token: string) {
-		if (!token) throw new Error("checkAuthorizationToken: No token specified.");
+	async checkAuthorizationToken() {
+		if (!store.get("authorization.accessToken"))
+			throw new Error("checkAuthorizationToken: No authorizationToken.");
 
-		return new Promise<boolean | Error>(async (resolve, reject) => {
-			const res = await this.axios({
-				method: "GET",
-				url: "/me",
-				headers: {
-					authorization: token
-				}
-			});
+		return new Promise<boolean>(async (resolve, reject) => {
+			try {
+				const res = await this.axios({
+					method: "GET",
+					url: "/me",
+					headers: {
+						authorization: store.get("authorization.accessToken")
+					}
+				});
 
-			if (res.data.userId && res.status === 200) {
-				if (!store.get("countryUserCode"))
-					store.set("countryUserCode", res.data.countryCode);
+				if (!store.get("authorization.countryUserCode"))
+					store.set("authorization.countryUserCode", res.data.countryCode);
 
 				return resolve(true);
+			} catch (err) {
+				return reject(new Error("NOT_LOGGED_IN"));
 			}
-			return reject(new Error("NOT_LOGGED_IN"));
+		});
+	}
+
+	async refreshToken() {
+		if (!store.get("authorization.refreshToken"))
+			throw new Error("refreshToken: No refreshToken.");
+
+		if (
+			(store.get("refreshDate") as number) - ~~(new Date().getTime() / 1000) <
+			86400
+		)
+			return true;
+
+		return new Promise<boolean>(async (resolve, reject) => {
+			const data = stringify({
+				client_id: "CzET4vdadNUFQ5JU",
+				client_unique_key: "ff42115e-8f59-42fa-9a81-fc99398f974a",
+				grant_type: "refresh_token",
+				refresh_token: store.get("authorization.refreshToken"),
+				scope: "r_usr+w_usr"
+			});
+
+			try {
+				const res = await this.axios({
+					method: "POST",
+					url: "/token",
+					headers: { "content-type": "application/x-www-form-urlencoded" },
+					data
+				});
+
+				store.set(
+					"authorization.accessToken",
+					`Bearer ${res.data.access_token}`
+				);
+				store.set("authorization.refreshDate", ~~(new Date().getTime() / 1000));
+				return resolve(true);
+			} catch (err) {
+				return reject(new Error("CANT_REFRESH_TOKEN"));
+			}
 		});
 	}
 }

@@ -67,44 +67,45 @@ export default class App {
 		switch (dialogVar) {
 			case 0:
 				{
-					await loginManager.loginToTidal().then(
-						async res => {
-							store.set("tidalToken", res);
-							store.set("noLoginPopup", true);
-						},
-						async err => {
-							const dialogVar = await dialog.showMessageBoxSync({
-								title: "tidalRPC",
-								message:
-									"There was issue with login to your account. Do you want to try again?",
-								buttons: ["Yes!", "No (don't show again)"],
-								defaultId: 0,
-								type: "error"
-							});
+					try {
+						const res = await loginManager.loginToTidal();
+						store.set("authorization.accessToken", res.authorizationToken);
+						store.set("authorization.refreshToken", res.refreshToken);
+						store.set("noLoginPopup", true);
+					} catch (err) {
+						const dialogVar = await dialog.showMessageBoxSync({
+							title: "tidalRPC",
+							message:
+								"There was issue with login to your account. Do you want to try again?",
+							buttons: ["Yes!", "No (don't show again)"],
+							defaultId: 0,
+							type: "error"
+						});
 
-							switch (dialogVar) {
-								case 0:
-									{
-										await loginManager.loginToTidal().then(
-											async res => {
-												store.set("tidalToken", res);
-												store.set("noLoginPopup", true);
-											},
-											async () => {
-												store.set("noLoginPopup", true);
-											}
+						switch (dialogVar) {
+							case 0:
+								{
+									try {
+										const res = await loginManager.loginToTidal();
+										store.set(
+											"authorization.accessToken",
+											res.authorizationToken
 										);
-									}
-									break;
-
-								case 1:
-									{
+										store.set("authorization.refreshToken", res.refreshToken);
+										store.set("noLoginPopup", true);
+									} catch (err) {
 										store.set("noLoginPopup", true);
 									}
-									break;
-							}
+								}
+								break;
+
+							case 1:
+								{
+									store.set("noLoginPopup", true);
+								}
+								break;
 						}
-					);
+					}
 				}
 				break;
 
@@ -119,7 +120,6 @@ export default class App {
 	}
 
 	private async _checkPerms() {
-		console.log(store.get("tidalToken"));
 		if (platform() !== "darwin") return this._askForLogin();
 		const screenPerms = await getAuthStatus("screen");
 		if (screenPerms !== ("denied" || "restricted")) {

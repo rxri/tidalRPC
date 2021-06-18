@@ -22,12 +22,15 @@ export default class TidalManager {
 		switch (tidalStatus.status) {
 			case "opened":
 				{
-					if (!this.currentSong.title && !this.currentSong.artist)
+					if (!this.currentSong.title && !this.currentSong.artist) {
+						if (!store.get("showPresence")) return clearActivity();
 						return setActivity(this.currentSong);
+					}
 
 					if (!this.currentSong.paused) {
 						this.currentSong.pausedTime += 1;
 						this.currentSong.paused = true;
+						if (!store.get("showPresence")) return clearActivity();
 						return setActivity(this.currentSong);
 					}
 
@@ -48,6 +51,7 @@ export default class TidalManager {
 				) {
 					if (this.currentSong.paused) {
 						this.currentSong.paused = false;
+						if (!store.get("showPresence")) return clearActivity();
 						return setActivity(this.currentSong);
 					}
 
@@ -72,7 +76,7 @@ export default class TidalManager {
 				});
 
 				const getAlbumInfo = await this.api.getAlbumById(songsInfo.album.id),
-					timeNow = Math.round(new Date().getTime() / 1000);
+					timeNow = ~~(new Date().getTime() / 1000);
 
 				this.currentSong.artist = await this._getAuthors(songsInfo.artists);
 				this.currentSong.title = songsInfo.title;
@@ -103,8 +107,8 @@ export default class TidalManager {
 				console.log(this.currentSong);
 
 				trayManager.update(this.currentSong);
-				if (store.get("showPresence")) return setActivity(this.currentSong);
-				else return clearActivity();
+				if (!store.get("showPresence")) return clearActivity();
+				return setActivity(this.currentSong);
 			}
 		}
 	}

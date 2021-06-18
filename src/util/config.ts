@@ -6,9 +6,13 @@ interface configType {
 	showButtons: boolean;
 	showAlbum: boolean;
 	autoStart: boolean;
-	tidalToken: string | null;
+	authorization: {
+		accessToken: string | null;
+		refreshToken: string | null;
+		countryUserCode: string | null;
+		refreshDate: number | null;
+	};
 	noLoginPopup: boolean;
-	countryUserCode: string | null;
 }
 
 export const store = new Store<configType>({
@@ -18,8 +22,12 @@ export const store = new Store<configType>({
 		showButtons: true,
 		showAlbum: true,
 		autoStart: true,
-		tidalToken: null,
-		noLoginPopup: false,
-		countryUserCode: null
+		authorization: {
+			accessToken: null,
+			refreshToken: null,
+			countryUserCode: null,
+			refreshDate: null
+		},
+		noLoginPopup: false
 	}
 });
