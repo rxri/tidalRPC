@@ -1,11 +1,18 @@
 import { app } from "electron";
 import { platform } from "os";
+import { registerHandler } from "segfault-handler";
 
 import { destroyClient } from "@managers/discordManager";
 import TrayManager from "@managers/trayManager";
+import { captureException, init } from "@sentry/node";
 import { store } from "@util/config";
 
 import App from "./app";
+
+//* Initialize sentry.
+init({
+	dsn: "https://4816402ebe234764a873e6bbeca41cf8@o824560.ingest.sentry.io/5810883"
+});
 
 export let trayManager: TrayManager;
 
@@ -33,3 +40,20 @@ app.whenReady().then(async () => {
 });
 
 app.on("will-quit", () => destroyClient());
+
+process.on("SIGINT", async () => process.exit(0));
+
+process.on("uncaughtException", err => {
+	captureException(err);
+	process.exit(1);
+});
+
+process.on("unhandledRejection", (err, _) => {
+	captureException(err);
+	process.exit(1);
+});
+
+registerHandler("segfault.log", (signal, address, stack) => {
+	const data = { signal, address, stack };
+	captureException(new Error(JSON.stringify(data)));
+});
