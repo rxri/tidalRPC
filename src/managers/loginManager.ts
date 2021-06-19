@@ -88,8 +88,6 @@ export class LoginManager {
 		)
 			return true;
 
-		console.log("checkAuthorizationToken");
-
 		return new Promise<boolean>(async (resolve, reject) => {
 			try {
 				const res = await this.axios({
@@ -122,8 +120,6 @@ export class LoginManager {
 			86400
 		)
 			return true;
-
-		console.log("refreshToken");
 
 		return new Promise<boolean>(async (resolve, reject) => {
 			const data = stringify({

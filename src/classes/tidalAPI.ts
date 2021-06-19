@@ -51,7 +51,7 @@ export default class TidalAPI {
 			this.isResultPending = true;
 			await this.loginManager.refreshToken();
 			await this.loginManager.checkAuthorizationToken();
-			const rs = await this.axios({
+			const res = await this.axios({
 				method: "GET",
 				baseURL: "https://listen.tidal.com/v1",
 				url: "/search/top-hits",
@@ -70,9 +70,9 @@ export default class TidalAPI {
 				}
 			});
 
-			if (rs.data.tracks.items.length === 0) this.results = [];
+			if (res.data.tracks.items.length === 0) this.results = [];
 
-			this.results = rs.data.tracks.items;
+			this.results = res.data.tracks.items;
 		} catch (err) {
 			console.log(err);
 			const dialogVar = await dialog.showMessageBoxSync({
