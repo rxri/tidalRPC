@@ -80,6 +80,13 @@ export class LoginManager {
 		if (!store.get("authorization.accessToken"))
 			throw new Error("checkAuthorizationToken: No authorizationToken.");
 
+		if (
+			(store.get("tidalAuth.checkDate") as number) -
+				~~(new Date().getTime() / 1000) <
+			600
+		)
+			return true;
+
 		return new Promise<boolean>(async (resolve, reject) => {
 			try {
 				const res = await this.axios({
@@ -93,6 +100,7 @@ export class LoginManager {
 				if (!store.get("authorization.countryUserCode"))
 					store.set("authorization.countryUserCode", res.data.countryCode);
 
+				store.set("tidalAuth.checkDate", ~~(new Date().getTime() / 1000));
 				return resolve(true);
 			} catch (err) {
 				return reject(new Error("NOT_LOGGED_IN"));

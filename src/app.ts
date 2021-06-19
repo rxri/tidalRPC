@@ -1,9 +1,10 @@
+import { blue } from "chalk";
 import debug from "debug";
 import { app, dialog } from "electron";
 import { autoUpdater } from "electron-updater";
 import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
-import { platform } from "os";
+import { platform, version } from "os";
 
 import { LoginManager } from "@managers/loginManager";
 import TidalManager from "@managers/tidalManager";
@@ -27,13 +28,15 @@ export default class App {
 				app.quit()
 			);
 		}
-		this._figlet();
+		this._consoleLog();
 		this._checkUpdates();
 		setTimeout(async () => await this._checkPerms(), 100);
 	}
 
-	private _figlet() {
+	private _consoleLog() {
 		console.log(textSync("tidalRPC"));
+		console.log(`App version: ${blue(`v${app.getVersion()}`)}`);
+		console.log(`Kernel Version: ${blue(version())}`);
 	}
 
 	private _checkUpdates() {

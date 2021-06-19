@@ -11,6 +11,7 @@ interface configType {
 		refreshToken: string | null;
 		countryUserCode: string | null;
 		refreshDate: number | null;
+		checkDate: number | null;
 	};
 	noLoginPopup: boolean;
 }
@@ -26,7 +27,8 @@ export const store = new Store<configType>({
 			accessToken: null,
 			refreshToken: null,
 			countryUserCode: null,
-			refreshDate: null
+			refreshDate: null,
+			checkDate: null
 		},
 		noLoginPopup: false
 	}
