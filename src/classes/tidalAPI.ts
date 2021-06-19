@@ -11,6 +11,7 @@ export default class TidalAPI {
 	private axios: AxiosInstance;
 	private loginManager;
 	private results: string[];
+	private isResultPending: boolean;
 	constructor() {
 		this.baseURL = "https://api.tidal.com/v1";
 		this.webToken = "CzET4vdadNUFQ5JU";
@@ -20,12 +21,15 @@ export default class TidalAPI {
 		this.axios = axios.create({ baseURL: this.baseURL, headers: this.headers });
 		this.loginManager = new LoginManager();
 		this.results = [];
+		this.isResultPending = false;
 	}
 
 	async searchSong(query: string, limit = 50) {
+		if (this.isResultPending) return;
 		if (!query) throw new Error("SearchSong: No query specified.");
 
 		if (!store.get("authorization.accessToken")) {
+			this.isResultPending = true;
 			const res = await this.axios({
 				method: "GET",
 				url: "/search/tracks",
@@ -39,10 +43,12 @@ export default class TidalAPI {
 
 			if (res.data.items.length === 0) return [];
 
+			this.isResultPending = false;
 			return res.data.items;
 		}
 
 		try {
+			this.isResultPending = true;
 			await this.loginManager.refreshToken();
 			await this.loginManager.checkAuthorizationToken();
 			const rs = await this.axios({
@@ -85,6 +91,10 @@ export default class TidalAPI {
 							const res = await this.loginManager.loginToTidal();
 							store.set("authorization.accessToken", res.authorizationToken);
 							store.set("authorization.refreshToken", res.refreshToken);
+							store.set(
+								"authorization.refreshDate",
+								~~(new Date().getTime() / 1000)
+							);
 							store.set("noLoginPopup", true);
 
 							const rs = await this.axios({
@@ -112,8 +122,10 @@ export default class TidalAPI {
 
 							this.results = rs.data.tracks.items;
 						} catch (err) {
+							console.log(err);
 							store.set("authorization.accessToken", null);
 							store.set("authorization.refreshToken", null);
+							store.set("authorization.refreshDate", null);
 							store.set("authorization.countryUserCode", null);
 							const res = await this.axios({
 								method: "GET",
@@ -137,6 +149,7 @@ export default class TidalAPI {
 					{
 						store.set("authorization.accessToken", null);
 						store.set("authorization.refreshToken", null);
+						store.set("authorization.refreshDate", null);
 						store.set("authorization.countryUserCode", null);
 						const res = await this.axios({
 							method: "GET",
@@ -157,6 +170,7 @@ export default class TidalAPI {
 			}
 		}
 
+		this.isResultPending = false;
 		return this.results;
 	}
 

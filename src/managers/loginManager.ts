@@ -28,15 +28,15 @@ export class LoginManager {
 			this.window.webContents.session.clearStorageData();
 			await this.window.loadURL("https://listen.tidal.com");
 
-			try {
-				setTimeout(async () => {
+			setTimeout(async () => {
+				try {
 					await this.window.webContents.executeJavaScript(
 						`document.querySelector('[datatest="no-user--signup"]').click()`
 					);
-				}, 2400);
-			} catch (err) {
-				//* User already clicked this button.
-			}
+				} catch (err) {
+					console.log("User probably already clicked this button."); //* User already clicked this button so we catch it.
+				}
+			}, 2400);
 
 			this.window.webContents.debugger.attach("1.3");
 			this.window.webContents.debugger.on(
@@ -81,11 +81,14 @@ export class LoginManager {
 			throw new Error("checkAuthorizationToken: No authorizationToken.");
 
 		if (
-			(store.get("tidalAuth.checkDate") as number) -
-				~~(new Date().getTime() / 1000) <
-			600
+			(store.get("authorization.checkDate") as number) &&
+			~~(new Date().getTime() / 1000) -
+				(store.get("authorization.checkDate") as number) <
+				600
 		)
 			return true;
+
+		console.log("checkAuthorizationToken");
 
 		return new Promise<boolean>(async (resolve, reject) => {
 			try {
@@ -100,9 +103,10 @@ export class LoginManager {
 				if (!store.get("authorization.countryUserCode"))
 					store.set("authorization.countryUserCode", res.data.countryCode);
 
-				store.set("tidalAuth.checkDate", ~~(new Date().getTime() / 1000));
+				store.set("authorization.checkDate", ~~(new Date().getTime() / 1000));
 				return resolve(true);
 			} catch (err) {
+				console.log(err);
 				return reject(new Error("NOT_LOGGED_IN"));
 			}
 		});
@@ -113,10 +117,13 @@ export class LoginManager {
 			throw new Error("refreshToken: No refreshToken.");
 
 		if (
-			(store.get("refreshDate") as number) - ~~(new Date().getTime() / 1000) <
+			~~(new Date().getTime() / 1000) -
+				(store.get("authorization.refreshDate") as number) <
 			86400
 		)
 			return true;
+
+		console.log("refreshToken");
 
 		return new Promise<boolean>(async (resolve, reject) => {
 			const data = stringify({
@@ -142,6 +149,7 @@ export class LoginManager {
 				store.set("authorization.refreshDate", ~~(new Date().getTime() / 1000));
 				return resolve(true);
 			} catch (err) {
+				console.log(err);
 				return reject(new Error("CANT_REFRESH_TOKEN"));
 			}
 		});

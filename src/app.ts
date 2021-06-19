@@ -24,8 +24,7 @@ export default class App {
 		debug.enable("tidalRPC:*");
 		if (platform() === "linux") {
 			return (
-				this.logger("TidalRPC is not designed to run on Linux distros."),
-				app.quit()
+				this.logger("TidalRPC is not designed to run on Linux."), app.quit()
 			);
 		}
 		this._consoleLog();
@@ -37,6 +36,7 @@ export default class App {
 		console.log(textSync("tidalRPC"));
 		console.log(`App version: ${blue(`v${app.getVersion()}`)}`);
 		console.log(`Kernel Version: ${blue(version())}`);
+		console.log(`userData path: ${blue(app.getPath("userData"))}`);
 	}
 
 	private _checkUpdates() {
@@ -48,7 +48,6 @@ export default class App {
 
 	private _init() {
 		this.logger.extend("rpcLoop")("Starting RPC Loop...");
-		this.tidalManager.rpcLoop();
 
 		setInterval(() => {
 			this.tidalManager.rpcLoop();
@@ -74,6 +73,10 @@ export default class App {
 						const res = await loginManager.loginToTidal();
 						store.set("authorization.accessToken", res.authorizationToken);
 						store.set("authorization.refreshToken", res.refreshToken);
+						store.set(
+							"authorization.refreshDate",
+							~~(new Date().getTime() / 1000)
+						);
 						store.set("noLoginPopup", true);
 					} catch (err) {
 						const dialogVar = await dialog.showMessageBoxSync({
@@ -95,6 +98,10 @@ export default class App {
 											res.authorizationToken
 										);
 										store.set("authorization.refreshToken", res.refreshToken);
+										store.set(
+											"authorization.refreshDate",
+											~~(new Date().getTime() / 1000)
+										);
 										store.set("noLoginPopup", true);
 									} catch (err) {
 										store.set("noLoginPopup", true);
