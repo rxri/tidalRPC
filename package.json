@@ -13,7 +13,8 @@
 		"dev": "devScript",
 		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
 		"start": "yarn paths && electron dist/index.js",
-		"build": "devScript --copyOnly && electron-rebuild && tsc && yarn paths && electron-builder --config builder.json --publish onTagOrDraft"
+		"build": "devScript --copyOnly && electron-rebuild && tsc && yarn paths && electron-builder --config builder.json --publish onTagOrDraft",
+		"rebuild": "electron-rebuild"
 	},
 	"dependencies": {
 		"@sentry/node": "^6.7.1",
