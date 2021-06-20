@@ -38,12 +38,20 @@ export default class Process {
 	}
 
 	private async _getProcessList(): Promise<Window[] | null> {
-		const data = await windowManager
-			.getWindows()
-			.filter(window => window.path.includes("TIDAL"));
+		try {
+			const runningProcesses = await windowManager.getWindows(),
+				findTIDAL = await runningProcesses.filter(
+					(window: { path: string | string[] }) => {
+						return window.path.includes("TIDAL");
+					}
+				);
 
-		if (data.length === 0) return null;
+			if (findTIDAL.length === 0) return null;
 
-		return data;
+			return findTIDAL;
+		} catch (err) {
+			console.log(err);
+			return null;
+		}
 	}
 }

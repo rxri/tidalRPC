@@ -4191,15 +4191,14 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"node-window-manager@npm:2.2.3":
-  version: 2.2.3
-  resolution: "node-window-manager@npm:2.2.3"
+node-window-manager@ririxidev/node-window-manager:
+  version: 2.2.4
+  resolution: "node-window-manager@https://github.com/ririxidev/node-window-manager.git#commit=8239d5e64d5bbad2edf9cb3ab2e2445ff4bc539d"
   dependencies:
     extract-file-icon: ^0.3.2
     node-addon-api: 2.0.0
-    node-gyp: latest
     node-gyp-build: ^4.2.1
-  checksum: 41cabbca87a6a5e5d79102879486ccdcc7d243321bbda1f2b32e3e422b724e52ee6778da2c22f094912dbc401df2f492f54edd829a0f17077109e9d11f8a7278
+  checksum: a5bf0c71ec9cc5d21a8c1d0a26cd3d14ac765756513253c94c8cc2fc20851e3ba4a7e89f43eb6086c06d4de1dd3d559affbb1c53d77e8e6746e0620defbb68f2
   languageName: node
   linkType: hard
 
@@ -5575,7 +5574,7 @@ fsevents@~2.3.1:
     figlet: ^1.5.0
     node-gyp: ^8.1.0
     node-mac-permissions: "mmaietta/node-mac-permissions#misc/conditional-binding"
-    node-window-manager: 2.2.3
+    node-window-manager: ririxidev/node-window-manager
     qs: ^6.10.1
     segfault-handler: ^1.3.0
     ts-devscript: ^3.0.3
