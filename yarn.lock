@@ -4198,7 +4198,7 @@ node-window-manager@ririxidev/node-window-manager:
     extract-file-icon: ^0.3.2
     node-addon-api: 2.0.0
     node-gyp-build: ^4.2.1
-  checksum: 5ed268dfd8463c3d56e3dd859203daf06558e04f36fd46285e1d5b54e87d4d232f3528125c365dbc6f0caded4f4fa204b0abbe2be82e556406e210926519c8db
+  checksum: 9098516393b22e8b343fbca414f549c904efc854786936b1022a92011d7348f09bc297b864b1c28492851ca9f622a7626cbe4f4c509f0f62cb2a3c52cf4a4057
   languageName: node
   linkType: hard
 
