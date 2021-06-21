@@ -1,6 +1,6 @@
 {
 	"name": "tidalRPC",
-	"version": "1.3.1",
+	"version": "1.3.2",
 	"description": "Unofficial Discord Rich Presence for Tidal Desktop app.",
 	"repository": {
 		"type": "git",
