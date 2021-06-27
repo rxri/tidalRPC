@@ -42,7 +42,10 @@ export default class TidalAPI {
 				timeout: 120000
 			});
 
-			if (res.data.items.length === 0) return [];
+			if (res.data.items.length === 0) {
+				this.isResultPending = false;
+				return [];
+			}
 
 			this.isResultPending = false;
 			return res.data.items;
@@ -69,13 +72,13 @@ export default class TidalAPI {
 						: store.get("authorization.countryUserCode"),
 					deviceType: "BROWSER"
 				},
-				timeout: 120000
+				timeout: 15000
 			});
 
 			if (res.data.tracks.items.length === 0) this.results = [];
-
-			this.results = res.data.tracks.items;
+			else this.results = res.data.tracks.items;
 		} catch (err) {
+			if (err?.code === "ECONNABORTED") return (this.results = []);
 			console.log(err);
 			const dialogVar = await dialog.showMessageBoxSync({
 				title: "tidalRPC",
@@ -118,13 +121,13 @@ export default class TidalAPI {
 										: store.get("authorization.countryUserCode"),
 									deviceType: "BROWSER"
 								},
-								timeout: 120000
+								timeout: 15000
 							});
 
 							if (rs.data.tracks.items.length === 0) this.results = [];
-
-							this.results = rs.data.tracks.items;
+							else this.results = rs.data.tracks.items;
 						} catch (err) {
+							if (err?.code === "ECONNABORTED") return (this.results = []);
 							console.log(err);
 							store.set("authorization.accessToken", null);
 							store.set("authorization.refreshToken", null);
@@ -139,12 +142,11 @@ export default class TidalAPI {
 									offset: 0,
 									countryCode: "US"
 								},
-								timeout: 120000
+								timeout: 15000
 							});
 
 							if (res.data.items.length === 0) this.results = [];
-
-							this.results = res.data.items;
+							else this.results = res.data.items;
 						}
 					}
 					break;
@@ -164,12 +166,11 @@ export default class TidalAPI {
 								offset: 0,
 								countryCode: "US"
 							},
-							timeout: 120000
+							timeout: 15000
 						});
 
 						if (res.data.items.length === 0) this.results = [];
-
-						this.results = res.data.items;
+						else this.results = res.data.items;
 					}
 					break;
 			}
@@ -191,7 +192,7 @@ export default class TidalAPI {
 					? "US"
 					: store.get("authorization.countryUserCode")
 			},
-			timeout: 120000
+			timeout: 15000
 		});
 
 		if (res.status === 404) return [];
