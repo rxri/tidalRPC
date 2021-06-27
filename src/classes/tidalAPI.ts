@@ -38,7 +38,8 @@ export default class TidalAPI {
 					limit,
 					offset: 0,
 					countryCode: "US"
-				}
+				},
+				timeout: 120000
 			});
 
 			if (res.data.items.length === 0) return [];
@@ -67,7 +68,8 @@ export default class TidalAPI {
 						? "US"
 						: store.get("authorization.countryUserCode"),
 					deviceType: "BROWSER"
-				}
+				},
+				timeout: 120000
 			});
 
 			if (res.data.tracks.items.length === 0) this.results = [];
@@ -115,7 +117,8 @@ export default class TidalAPI {
 										? "US"
 										: store.get("authorization.countryUserCode"),
 									deviceType: "BROWSER"
-								}
+								},
+								timeout: 120000
 							});
 
 							if (rs.data.tracks.items.length === 0) this.results = [];
@@ -135,7 +138,8 @@ export default class TidalAPI {
 									limit,
 									offset: 0,
 									countryCode: "US"
-								}
+								},
+								timeout: 120000
 							});
 
 							if (res.data.items.length === 0) this.results = [];
@@ -159,7 +163,8 @@ export default class TidalAPI {
 								limit,
 								offset: 0,
 								countryCode: "US"
-							}
+							},
+							timeout: 120000
 						});
 
 						if (res.data.items.length === 0) this.results = [];
@@ -185,7 +190,8 @@ export default class TidalAPI {
 				countryCode: !store.get("authorization.countryUserCode")
 					? "US"
 					: store.get("authorization.countryUserCode")
-			}
+			},
+			timeout: 120000
 		});
 
 		if (res.status === 404) return [];
