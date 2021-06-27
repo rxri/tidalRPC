@@ -61,11 +61,17 @@ export default class TidalManager {
 				const authors = data[1].split(", ");
 
 				let songsInfo = await this.api.searchSong(
-					`${data[0].toLowerCase()} ${authors[0].toLowerCase()}`
+					`${data[0].toLowerCase()} ${authors.toString().toLowerCase()}`
 				);
 
-				if (!songsInfo || songsInfo.length === 0)
-					return clearActivity(), this._clearCurrentSong();
+				if (!songsInfo || songsInfo.length === 0) {
+					songsInfo = await this.api.searchSong(
+						`${data[0].toLowerCase()} ${authors[0].toLowerCase()}`
+					);
+
+					if (!songsInfo || songsInfo.length === 0)
+						return clearActivity(), this._clearCurrentSong();
+				}
 
 				songsInfo.find((song: { audioQuality: string; title: string }) => {
 					if (song.audioQuality === "HI_RES" && song.title === data[0]) {

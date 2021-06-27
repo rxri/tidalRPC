@@ -35,13 +35,13 @@
 		"icon": "src/assets/macIcon.icns",
 		"target": { "target": "default", "arch": "universal" },
 		"artifactName": "tidalRPC-mac-universal.${ext}",
-		"publish": ["github"]
+		"publish": { "provider": "github", "releaseType": "draft" }
 	},
 	"win": {
 		"target": "nsis",
 		"icon": "src/assets/windows.ico",
 		"artifactName": "tidalRPC-installer.exe",
-		"publish": ["github"]
+		"publish": { "provider": "github", "releaseType": "draft" }
 	},
 	"npmRebuild": false
 }
