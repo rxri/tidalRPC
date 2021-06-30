@@ -73,13 +73,29 @@ export default class TidalManager {
 						return clearActivity(), this._clearCurrentSong();
 				}
 
-				songsInfo.find((song: { audioQuality: string; title: string }) => {
-					if (song.audioQuality === "HI_RES" && song.title === data[0]) {
-						return (songsInfo = song);
-					}
+				songsInfo.find(
+					(song: {
+						audioQuality: string;
+						title: string;
+						artists: {
+							id: number;
+							name: string;
+							type: string;
+							picture: string;
+						}[];
+					}) => {
+						if (song.audioQuality === "HI_RES" && song.title === data[0]) {
+							if (authors.length === song.artists.length)
+								return (songsInfo = song);
+						}
 
-					if (song.title === data[0]) songsInfo = song;
-				});
+						if (
+							song.title === data[0] &&
+							authors.length === song.artists.length
+						)
+							songsInfo = song;
+					}
+				);
 
 				const getAlbumInfo = await this.api.getAlbumById(songsInfo.album.id),
 					timeNow = ~~(new Date().getTime() / 1000);
