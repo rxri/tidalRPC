@@ -5,6 +5,7 @@ import { autoUpdater } from "electron-updater";
 import { textSync } from "figlet";
 import { askForScreenCaptureAccess, getAuthStatus } from "node-mac-permissions";
 import { platform, version } from "os";
+import { arch } from "process";
 
 import { LoginManager } from "@managers/loginManager";
 import TidalManager from "@managers/tidalManager";
@@ -40,7 +41,10 @@ export default class App {
 	}
 
 	private _checkUpdates() {
+		autoUpdater.autoDownload = false;
 		autoUpdater.checkForUpdatesAndNotify();
+		if (arch === "arm64") return;
+		autoUpdater.downloadUpdate();
 		autoUpdater.on("update-downloaded", () => {
 			autoUpdater.quitAndInstall();
 		});
