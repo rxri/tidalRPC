@@ -4184,12 +4184,12 @@ fsevents@~2.3.1:
 
 node-window-manager@ririxidev/node-window-manager:
   version: 2.2.4
-  resolution: "node-window-manager@https://github.com/ririxidev/node-window-manager.git#commit=724784030e9103bebfdb7a3b04a8181de1367165"
+  resolution: "node-window-manager@https://github.com/ririxidev/node-window-manager.git#commit=e9e086957b1417f18045a7745562c98c7687c20f"
   dependencies:
     extract-file-icon: ^0.3.2
     node-addon-api: 2.0.0
     node-gyp-build: ^4.2.1
-  checksum: 3b0860b5c81512c69774645e926bd54a00451298eadd5fe1a2a6dd8c8be7ac9cfd94652028ece0472a23c7cfe92e9627a9cbabe8623ce52f0dafd4be06189954
+  checksum: f3253b184143b49e2388d3c8e2c818da34e5f95d77bdc995f4fafe16fb1fe167ddecbbb4472cef389aff3bb56d662fa706b86bb72371debdb17287e8aec71f63
   languageName: node
   linkType: hard
 

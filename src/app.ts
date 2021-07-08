@@ -44,7 +44,9 @@ export default class App {
 		autoUpdater.autoDownload = false;
 		autoUpdater.checkForUpdatesAndNotify();
 		if (arch === "arm64") return;
-		autoUpdater.downloadUpdate();
+		autoUpdater.on("update-available", () => {
+			autoUpdater.downloadUpdate();
+		});
 		autoUpdater.on("update-downloaded", () => {
 			autoUpdater.quitAndInstall();
 		});
