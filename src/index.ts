@@ -1,6 +1,5 @@
 import { app } from "electron";
 import { platform } from "os";
-import { registerHandler } from "segfault-handler";
 
 import { destroyClient } from "@managers/discordManager";
 import TrayManager from "@managers/trayManager";
@@ -51,9 +50,4 @@ process.on("uncaughtException", err => {
 process.on("unhandledRejection", (err, _) => {
 	captureException(err);
 	process.exit(1);
-});
-
-registerHandler("segfault.log", (signal, address, stack) => {
-	const data = { signal, address, stack };
-	captureException(new Error(JSON.stringify(data)));
 });

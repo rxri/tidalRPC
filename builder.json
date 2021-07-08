@@ -33,8 +33,8 @@
 	},
 	"mac": {
 		"icon": "src/assets/macIcon.icns",
-		"target": { "target": "default", "arch": "universal" },
-		"artifactName": "tidalRPC-mac-universal.${ext}",
+		"target": { "target": "default", "arch": ["x64", "arm64"] },
+		"artifactName": "tidalRPC-mac-${arch}.${ext}",
 		"publish": { "provider": "github", "releaseType": "draft" }
 	},
 	"win": {
@@ -42,6 +42,5 @@
 		"icon": "src/assets/windows.ico",
 		"artifactName": "tidalRPC-installer.exe",
 		"publish": { "provider": "github", "releaseType": "draft" }
-	},
-	"npmRebuild": false
+	}
 }

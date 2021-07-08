@@ -871,7 +871,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.2.1, bindings@npm:^1.3.0, bindings@npm:^1.5.0":
+"bindings@npm:^1.3.0, bindings@npm:^1.5.0":
   version: 1.5.0
   resolution: "bindings@npm:1.5.0"
   dependencies:
@@ -3997,15 +3997,6 @@ fsevents@~2.3.1:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.14.0":
-  version: 2.14.2
-  resolution: "nan@npm:2.14.2"
-  dependencies:
-    node-gyp: latest
-  checksum: 7a269139b66a7d37470effb7fb36a8de8cc3b5ffba6e40bb8e0545307911fe5ebf94797ec62f655ecde79c237d169899f8bd28256c66a32cbc8284faaf94c3f4
-  languageName: node
-  linkType: hard
-
 "nanomatch@npm:^1.2.9":
   version: 1.2.13
   resolution: "nanomatch@npm:1.2.13"
@@ -5049,17 +5040,6 @@ node-window-manager@ririxidev/node-window-manager:
   languageName: node
   linkType: hard
 
-"segfault-handler@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "segfault-handler@npm:1.3.0"
-  dependencies:
-    bindings: ^1.2.1
-    nan: ^2.14.0
-    node-gyp: latest
-  checksum: 253860dd1e07492bb288a66366f146241b6d69e5cbac0f8f0076bb30fc4f28be94519451cad2cca6452352bba9c46b627fb69d953f5a7b523ae083eece234118
-  languageName: node
-  linkType: hard
-
 "semver-compare@npm:^1.0.0":
   version: 1.0.0
   resolution: "semver-compare@npm:1.0.0"
@@ -5576,7 +5556,6 @@ node-window-manager@ririxidev/node-window-manager:
     node-mac-permissions: "mmaietta/node-mac-permissions#misc/conditional-binding"
     node-window-manager: ririxidev/node-window-manager
     qs: ^6.10.1
-    segfault-handler: ^1.3.0
     ts-devscript: ^3.0.3
     tscpaths: ^0.0.9
   languageName: unknown
