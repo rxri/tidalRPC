@@ -13,7 +13,8 @@
 		"dev": "devScript",
 		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
 		"start": "yarn paths && electron dist/index.js",
-		"build": "devScript --copyOnly && tsc && yarn paths && electron-builder --config builder.json --publish onTagOrDraft",
+		"build:macos": "devScript --copyOnly && tsc && yarn paths && electron-builder --config builder_macos.json --publish onTagOrDraft",
+		"build:win": "devScript --copyOnly && tsc && yarn paths && electron-rebuild && electron-builder --config builder_win.json --publish onTagOrDraft",
 		"postinstall": "electron-builder install-app-deps"
 	},
 	"dependencies": {

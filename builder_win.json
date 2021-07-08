@@ -1,0 +1,20 @@
+{
+	"appId": "ririxidev.TidalRPC",
+	"productName": "tidalRPC",
+	"directories": {
+		"app": "dist",
+		"buildResources": "src/assets",
+		"output": "app"
+	},
+	"asar": true,
+	"nsis": {
+		"differentialPackage": false
+	},
+	"win": {
+		"target": "nsis",
+		"icon": "src/assets/windows.ico",
+		"artifactName": "tidalRPC-installer.exe",
+		"publish": { "provider": "github", "releaseType": "draft" }
+	},
+	"npmRebuild": false
+}
