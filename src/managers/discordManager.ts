@@ -12,7 +12,7 @@ export let rpcClient: DiscordClient;
 class DiscordClient {
 	clientId: string;
 	private client: Client;
-	private ready: boolean = false;
+	private ready = false;
 	actualPresence!: Presence;
 
 	constructor(clientID: string) {
