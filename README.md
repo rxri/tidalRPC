@@ -1,14 +1,13 @@
-# This program is discontinued. I don't use Tidal anymore so I can't maintain it.
-<br/>
-<br/>
+## Project has been discontinued due lack of interest in supporting it.
 
+<br/>
+<br/>
 
 <img src="https://user-images.githubusercontent.com/9348108/118810281-fa1c2900-b8ab-11eb-853c-868512cc57cb.png" align="left"></img>
 
 <h1>Tidal Rich Presence <code>--unofficial</code></h1>
 Discord Rich Presence for Tidal Desktop Application!
 <br><br><br><br><br><br><br><br><br><br><br><br>
-
 
 ## Features
 
@@ -50,10 +49,6 @@ _Warning: macOS users need to have app in `Applications` folder to have config w
 ### How to access them?
 
 It's super easy! Just click on `tidalRPC` tray icon and go to `Settings` submenu!
-
-## Why there is no Album artwork on Rich Presence?!?!
-
-Due to Discord limitations, I'm not going to implement workaround to do it. It's very risky since discord is banning most of people that are acting as "self-bot" and it would need your Authorization token to upload assets. Due to it I don't want anyone to be banned using our program so, it's not going to happen.
 
 ---
 
