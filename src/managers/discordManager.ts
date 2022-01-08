@@ -38,7 +38,7 @@ class DiscordClient {
 
 		this.client
 			.login({ clientId: this.clientId })
-			.catch(err => console.error(err));
+			.catch((err: any) => console.error(err));
 	}
 
 	setActivity(data?: Presence) {
@@ -65,7 +65,8 @@ export const setActivity = (data: Song) => {
 		if (!data?.startTime) return clearActivity();
 
 		const presenceData: Presence = {
-			largeImageKey: data.quality === "HI_RES" ? "logo_mqa" : "logo",
+			largeImageKey:
+				data.largeImage ?? data.quality === "HI_RES" ? "logo_mqa" : "logo",
 			largeImageText:
 				data.quality === "HI_RES"
 					? `Tidal [MQA] ${

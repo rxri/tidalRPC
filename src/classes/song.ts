@@ -7,6 +7,7 @@ export default class Song {
 	pausedTime: number;
 	paused: boolean;
 	quality: "HI_RES" | "LOSSLESS" | "NORMAL";
+	largeImage: string | undefined;
 	buttons?: { label: string; url: string }[];
 
 	constructor() {
@@ -17,5 +18,6 @@ export default class Song {
 		this.pausedTime = 0;
 		this.paused = false;
 		this.quality = "NORMAL";
+		this.largeImage = undefined;
 	}
 }

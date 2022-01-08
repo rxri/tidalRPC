@@ -83,6 +83,11 @@ export default class TidalManager {
 							type: string;
 							picture: string;
 						}[];
+						album: {
+							id: number;
+							title: string;
+							cover: string;
+						};
 					}) => {
 						if (song.audioQuality === "HI_RES" && song.title === data[0]) {
 							if (authors.length === song.artists.length)
@@ -113,6 +118,12 @@ export default class TidalManager {
 				this.currentSong.paused = false;
 				this.currentSong.startTime = timeNow;
 				this.currentSong.buttons = [];
+				if (songsInfo.album.cover) {
+					this.currentSong.largeImage = `https://resources.tidal.com/images/${songsInfo.album.cover.replace(
+						/-/g,
+						"/"
+					)}/320x320.jpg`;
+				}
 
 				if (songsInfo.id)
 					this.currentSong.buttons?.push({
@@ -144,6 +155,7 @@ export default class TidalManager {
 		this.currentSong.pausedTime = 0;
 		this.currentSong.paused = false;
 		this.currentSong.quality = "NORMAL";
+		this.currentSong.largeImage = undefined;
 
 		trayManager.update();
 	}
