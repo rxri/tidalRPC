@@ -36,7 +36,7 @@
 		"@types/discord-rpc": "^3.0.5",
 		"@types/figlet": "^1.5.1",
 		"@types/qs": "^6.9.6",
-		"electron": "^13.1.2",
+		"electron": "^13.3.0",
 		"electron-builder": "^22.10.5",
 		"electron-rebuild": "^2.3.5",
 		"node-gyp": "^8.1.0",
