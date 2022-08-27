@@ -1,0 +1,38 @@
+{
+	"appId": "ririxidev.TidalRPC",
+	"productName": "tidalRPC",
+	"directories": {
+		"app": "dist",
+		"buildResources": "src/assets",
+		"output": "app"
+	},
+	"asar": true,
+	"dmg": {
+		"background": "src/assets/background.png",
+		"window": {
+			"width": 660,
+			"height": 400
+		},
+		"contents": [
+			{
+				"x": 180,
+				"y": 170
+			},
+			{
+				"x": 480,
+				"y": 170,
+				"type": "link",
+				"path": "/Applications"
+			}
+		],
+		"title": "Discord RPC for Tidal Desktop",
+		"writeUpdateInfo": false
+	},
+	"mac": {
+		"icon": "src/assets/macIcon.icns",
+		"target": { "target": "default", "arch": ["x64", "arm64"] },
+		"artifactName": "tidalRPC-mac-${arch}.${ext}",
+		"publish": null,
+		"identity": null
+	}
+}

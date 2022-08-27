@@ -1,0 +1,9 @@
+# Output folder(s)
+dist/
+app/
+
+# Node
+node_modules
+
+# macOS
+.DS_Store
