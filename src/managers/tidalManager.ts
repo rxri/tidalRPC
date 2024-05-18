@@ -89,8 +89,8 @@ export default class TidalManager {
 
 				if (foundSong.url) {
 					this.currentSong.buttons?.push({
-						label: "Play on Tidal",
-						url: foundSong.url
+						label: "Play on Your Streaming Platform",
+						url: `${foundSong.url}?u` //The '?u' allows opening the track on other platforms
 					});
 				}
 

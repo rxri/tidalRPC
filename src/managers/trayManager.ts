@@ -31,7 +31,7 @@ export default class TrayManager {
 	update(song?: Song) {
 		const menu = Menu.buildFromTemplate([
 			{
-				label: `TidalRPC ${app.getVersion()}`,
+				label: `TidalRPC - Nick's Fork ${app.getVersion()}`,
 				enabled: false
 			},
 			{
