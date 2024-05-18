@@ -1,44 +1,45 @@
 {
-	"name": "tidalrpc",
-	"version": "2.0.0",
-	"description": "Unofficial Discord RPC for Tidal Desktop",
-	"license": "GPL-3.0",
-	"scripts": {
-		"dev": "nodemon --watch 'src/**' --exec 'pnpm run start'",
-		"build": "tsc",
-		"paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
-		"copy:macos": "copyfiles --error --up 1 src/assets/*.* dist && cp package.json dist/",
-		"copy:win": "copyfiles --error --up 1 src/assets/*.* dist && @powershell copy './package.json' './dist'",
-		"start": "pnpm run build && pnpm run copy && pnpm run paths && electron dist/index.js",
-		"build:macos": "tsc && pnpm run copy:macos && pnpm run paths && electron-builder -c 'configs/builder/macos.json'",
-		"build:win": "tsc && pnpm run copy:win && pnpm run paths && npm exec electron-rebuild && npm exec -- electron-builder -c configs/builder/windows.json",
-		"build:ci:macos": "tsc && pnpm run copy:macos && pnpm run paths && electron-builder -c configs/builder/macos.json -p never",
-		"build:ci:win": "tsc && pnpm run copy:win && pnpm run paths && npm exec electron-rebuild && npm exec -- electron-builder -c configs/builder/windows.json -p never",
-		"postinstall": "npm exec electron-builder install-app-deps"
-	},
-	"dependencies": {
-		"axios": "1.1.3",
-		"chalk": "4.1.2",
-		"debug": "4.3.4",
-		"discord-rpc": "4.0.1",
-		"electron-store": "8.1.0",
-		"electron-updater": "5.3.0",
-		"node-window-manager": "ririxidev/node-window-manager",
-		"qs": "6.11.0"
-	},
-	"devDependencies": {
-		"@electron/rebuild": "3.2.10",
-		"@types/debug": "4.1.7",
-		"@types/discord-rpc": "4.0.3",
-		"@types/figlet": "1.5.5",
-		"@types/node": "18.11.9",
-		"@types/qs": "6.9.7",
-		"copyfiles": "2.4.1",
-		"electron": "21.2.3",
-		"electron-builder": "23.6.0",
-		"node-gyp": "9.3.0",
-		"nodemon": "2.0.20",
-		"tscpaths": "0.0.9",
-		"typescript": "4.8.4"
-	}
+  "name": "tidalrpc",
+  "version": "2.0.0",
+  "description": "Unofficial Discord RPC for Tidal Desktop",
+  "license": "GPL-3.0",
+  "scripts": {
+    "dev": "nodemon --watch 'src/**' --exec pnpm run start",
+    "build": "tsc",
+    "paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "copy:macos": "copyfiles --error --up 1 src/assets/*.* dist && cp package.json dist/",
+    "copy:win": "copyfiles --error --up 1 src/assets/*.* dist && @powershell copy './package.json' './dist'",
+    "start": "pnpm run build && pnpm run copy:win && pnpm run paths && npx electron dist/index.js",
+    "build:macos": "tsc && pnpm run copy:macos && pnpm run paths && electron-builder -c 'configs/builder/macos.json'",
+    "build:win": "tsc && pnpm run copy:win && pnpm run paths && npm exec electron-rebuild && npm exec -- electron-builder -c configs/builder/windows.json",
+    "build:ci:macos": "tsc && pnpm run copy:macos && pnpm run paths && electron-builder -c configs/builder/macos.json -p never",
+    "build:ci:win": "tsc && pnpm run copy:win && pnpm run paths && npm exec electron-rebuild && npm exec -- electron-builder -c configs/builder/windows.json -p never",
+    "postinstall": "npm exec electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "chalk": "4.1.2",
+    "debug": "4.3.4",
+    "discord-rpc": "4.0.1",
+    "electron-store": "8.1.0",
+    "electron-updater": "5.3.0",
+    "node-window-manager": "ririxidev/node-window-manager",
+    "qs": "6.11.0",
+    "run-script-os": "^1.1.6"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "3.2.10",
+    "@types/debug": "4.1.7",
+    "@types/discord-rpc": "4.0.3",
+    "@types/figlet": "1.5.5",
+    "@types/node": "18.11.9",
+    "@types/qs": "6.9.7",
+    "copyfiles": "2.4.1",
+    "electron": "^30.0.6",
+    "electron-builder": "^24.13.3",
+    "node-gyp": "10.1.0",
+    "nodemon": "^3.1.0",
+    "tscpaths": "0.0.9",
+    "typescript": "4.8.4"
+  }
 }
