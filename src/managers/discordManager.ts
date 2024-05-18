@@ -76,7 +76,7 @@ export const setActivity = (data: Song) => {
 			presenceData.endTimestamp =
 				data.startTime + data.duration + data.pausedTime;
 
-		presenceData.state = data.artist;
+		presenceData.state = `by ${data.artist}`;
 		presenceData.details = data.title;
 
 		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons"))

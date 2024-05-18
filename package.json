@@ -1,6 +1,6 @@
 {
-  "name": "tidalrpc",
-  "version": "2.0.0",
+  "name": "tidalrpc-slipp",
+  "version": "1.0.1",
   "description": "Unofficial Discord RPC for Tidal Desktop",
   "license": "GPL-3.0",
   "scripts": {
