@@ -6,7 +6,7 @@ import { join } from "path";
 import { logger } from "../config";
 import { platform } from "os";
 import { rpcClient } from "@managers/discordManager";
-import { store } from "@util/config";
+import { AlbumPrefs, ArtistPrefs, store } from "@util/config";
 import { trayManager } from "../";
 
 let trayIcon: string;
@@ -31,7 +31,7 @@ export default class TrayManager {
 	update(song?: Song) {
 		const menu = Menu.buildFromTemplate([
 			{
-				label: `TidalRPC - Nick's Fork ${app.getVersion()}`,
+				label: `TidalRPC - Slipp's Fork ${app.getVersion()}`,
 				enabled: false
 			},
 			{
@@ -81,6 +81,40 @@ export default class TrayManager {
 								type: "checkbox",
 								checked: store.get("showButtons"),
 								click: () => store.set("showButtons", !store.get("showButtons"))
+							},
+							{ 
+								type: "separator",
+								label: "Album Display Options"
+							},
+							{
+								label: song ? `${song.album.name}` : `[ALBUM NAME]`,
+								type: "radio",
+								checked: store.get("albumPrefs") == AlbumPrefs.justName,
+								click: () => store.set("albumPrefs", AlbumPrefs.justName)
+							},
+							{
+								label: song ? `${song.album.name} (${song.album.year})` : `[ALBUM NAME] ([ALBUM YEAR])`,
+								type: "radio",
+								checked: store.get("albumPrefs") == AlbumPrefs.withYear,
+								click: () => store.set("albumPrefs", AlbumPrefs.withYear)
+							},
+							{ 
+								type: "separator",
+								label: "Song Display Options"
+							},
+							{
+								label: song ? `${song.title}` : `[SONG TITLE]`,
+								sublabel: song ? `${song.artist}` : `[SONG ARTIST]`,
+								type: "radio",
+								checked: store.get("artistPrefs") == ArtistPrefs.justName,
+								click: () => store.set("artistPrefs", ArtistPrefs.justName)
+							},
+							{
+								label: song ? `${song.title}` : `[SONG TITLE]`,
+								sublabel: song ? `by ${song.artist}` : `by [SONG ARTIST]`,
+								type: "radio",
+								checked: store.get("artistPrefs") == ArtistPrefs.byName,
+								click: () => store.set("artistPrefs", ArtistPrefs.byName)
 							}
 						]
 					}

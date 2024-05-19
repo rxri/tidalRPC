@@ -31,10 +31,18 @@ export default class TidalManager {
 				}
 				break;
 			case "playing": {
-				const data = tidalStatus.windowTitle?.trim().split("-");
-				if (!data) return console.error("Can't get current song");
+				let data = tidalStatus.windowTitle?.trim().split("-");
+				if (!data) {
+					if (!tidalStatus.windowTitle?.includes("...")) return console.error("Can't get current song");
+					
+					//We may only have some of the song name, but that's probably enough
+					data = [
+						tidalStatus.windowTitle?.substring(0,tidalStatus.windowTitle?.length - 3),
+						""
+					]
+				}
 
-				const title = data[0].trim(),
+				const title = data[0].trim().substring(0, 40),
 					authors = data[1].trim().split(", ");
 
 				let songsInfo = await this.api.searchSong(
@@ -45,17 +53,22 @@ export default class TidalManager {
 					songsInfo = await this.api.searchSong(`${title} ${authors[0]}`);
 
 					if (!songsInfo || songsInfo.length === 0)
-						return clearActivity(), this._clearCurrentSong();
+						return console.error(`Couldn't find current song info from name ${tidalStatus.windowTitle}`)
+							, clearActivity()
+							, this._clearCurrentSong();
+		
 				}
 
 				const foundSong = songsInfo
 					.map(s => {
-						if (s.title === title && authors.length === s.artists.length)
+						if (s.title === data[0].trim() && authors.length === s.artists.length)
 							return s;
 					})
 					.filter(s => {
 						return s;
 					})[0];
+
+				if (!foundSong) return console.error(`Couldn't find an entry in TIDAL's API for ${title} by ${authors.toString()}`)
 
 				const getAlbumInfo = await this.api.getAlbumById(foundSong.album.id),
 					timeNow = ~~(new Date().getTime() / 1000);
