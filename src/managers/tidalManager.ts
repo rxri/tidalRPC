@@ -32,15 +32,8 @@ export default class TidalManager {
 				break;
 			case "playing": {
 				let data = tidalStatus.windowTitle?.trim().split("-");
-				if (!data) {
-					if (!tidalStatus.windowTitle?.includes("...")) return console.error("Can't get current song");
-					
-					//We may only have some of the song name, but that's probably enough
-					data = [
-						tidalStatus.windowTitle?.substring(0,tidalStatus.windowTitle?.length - 3),
-						""
-					]
-				}
+				if (!data)
+					return console.error("Can't get current song");
 
 				const title = data[0].trim().substring(0, 40),
 					authors = data[1].trim().split(", ");
@@ -74,11 +67,10 @@ export default class TidalManager {
 					timeNow = ~~(new Date().getTime() / 1000);
 
 				if (
-					timeNow -
-						(this.currentSong.startTime + this.currentSong.pausedTime) >=
-						this.currentSong.duration ||
-					(this.currentSong.title !== foundSong.title &&
-						this.currentSong.artist !== this._getAuthors(foundSong.artists))
+					timeNow - this.currentSong.startTime + this.currentSong.pausedTime 
+						>= this.currentSong.duration 
+					|| (this.currentSong.title !== foundSong.title 
+						&& this.currentSong.artist !== this._getAuthors(foundSong.artists))
 				) {
 					this.currentSong.startTime = timeNow;
 					this.currentSong.pausedTime = 0;
