@@ -2,7 +2,7 @@
 
 > Discord Rich Presence for Tidal Desktop Application
 >
-> ![version](https://img.shields.io/github/package-json/v/ririxidev/tidalRPC?label=version)
+> ![version](https://img.shields.io/github/package-json/v/SlippStream/tidalRPC-slipp?label=version)
 
 **tidalRPC** is a program that retrieves data from Tidal Desktop app to in Discord Rich Presence.
 
