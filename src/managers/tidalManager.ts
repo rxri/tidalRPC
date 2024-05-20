@@ -9,6 +9,7 @@ import { trayManager } from "../";
 export default class TidalManager {
 	private api: TidalAPI;
 	private currentSong: Song;
+	private lastSongTitle: string;
 	constructor() {
 		this.api = new TidalAPI();
 		this.currentSong = new Song();
@@ -31,12 +32,12 @@ export default class TidalManager {
 				}
 				break;
 			case "playing": {
-				let data = tidalStatus.windowTitle?.trim().split("-");
+				let data = tidalStatus.windowTitle?.trim().split(" - ");
 				if (!data)
 					return console.error("Can't get current song");
 
 				const title = data[0].trim().substring(0, 40),
-					authors = data[1].trim().split(", ");
+					authors = data[data.length - 1].trim().split(", ");
 
 				let songsInfo = await this.api.searchSong(
 					`${title} ${authors.toString()}`
@@ -99,7 +100,16 @@ export default class TidalManager {
 					});
 				}
 
-				console.log(this.currentSong);
+				//Update last played song + log to console
+				if (
+					(this.lastSongTitle
+						&& this.lastSongTitle !== this.currentSong.title)
+					||
+					!this.lastSongTitle	
+				) {
+					console.log(this.currentSong);
+					this.lastSongTitle = this.currentSong.title;
+				}
 
 				trayManager.update(this.currentSong);
 				if (!store.get("showPresence")) return clearActivity();

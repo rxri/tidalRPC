@@ -31,7 +31,7 @@ export default class TrayManager {
 	update(song?: Song) {
 		const menu = Menu.buildFromTemplate([
 			{
-				label: `TidalRPC - Slipp's Fork ${app.getVersion()}`,
+				label: `TidalRPC ${app.getVersion()}`,
 				enabled: false
 			},
 			{
@@ -83,8 +83,11 @@ export default class TrayManager {
 								click: () => store.set("showButtons", !store.get("showButtons"))
 							},
 							{ 
-								type: "separator",
-								label: "Album Display Options"
+								type: "separator"
+							},
+							{
+								label: "Album Display Options",
+								enabled: false
 							},
 							{
 								label: song ? `${song.album.name}` : `[ALBUM NAME]`,
@@ -99,8 +102,11 @@ export default class TrayManager {
 								click: () => store.set("albumPrefs", AlbumPrefs.withYear)
 							},
 							{ 
-								type: "separator",
-								label: "Song Display Options"
+								type: "separator"
+							},
+							{
+								label: "Song Display Options",
+								enabled: false
 							},
 							{
 								label: song ? `${song.title}` : `[SONG TITLE]`,
