@@ -4,7 +4,7 @@
   "description": "Unofficial Discord RPC for Tidal Desktop",
   "license": "GPL-3.0",
   "scripts": {
-    "dev": "nodemon --watch 'src/**' --exec pnpm run start",
+    "dev": "nodemon -e ts --watch 'src/**' --exec pnpm run start",
     "build": "run-script-os",
     "paths": "tscpaths -p tsconfig.json -s ./src -o ./dist",
     "copy": "run-script-os",

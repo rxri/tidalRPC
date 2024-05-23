@@ -32,11 +32,21 @@ export default class TidalManager {
 				}
 				break;
 			case "playing": {
+				/**
+				 * Window title format: "[TRACK NAME] - [ARTIST NAME]"
+				 * Example: "Shake It Off - Taylor Swift" 
+				 * 
+				 *! This solution is imperfect. It will split within an artist or track's name
+				 *! if the delimiter is present.
+				 */
 				let data = tidalStatus.windowTitle?.trim().split(" - ");
 				if (!data)
 					return console.error("Can't get current song");
 
-				const title = data[0].trim().substring(0, 40),
+				const title = data[0].trim(),
+					/** Because the window title may not be split perfectly, we take
+					 * the last token, as it's guaranteed to be part of the artist name. 
+					*/  
 					authors = data[data.length - 1].trim().split(", ");
 
 				let songsInfo = await this.api.searchSong(
@@ -44,7 +54,10 @@ export default class TidalManager {
 				);
 
 				if (!songsInfo || songsInfo.length === 0) {
-					songsInfo = await this.api.searchSong(`${title} ${authors[0]}`);
+					/** TIDAL's api will occasionally return no results for songs with very long names.
+					 * So, we truncate the title when we try again
+					 */ 
+					songsInfo = await this.api.searchSong(`${title.substring(0,40)} ${authors[0]}`);
 
 					if (!songsInfo || songsInfo.length === 0)
 						return console.error(`Couldn't find current song info from name ${tidalStatus.windowTitle}`)
@@ -100,16 +113,7 @@ export default class TidalManager {
 					});
 				}
 
-				//Update last played song + log to console
-				if (
-					(this.lastSongTitle
-						&& this.lastSongTitle !== this.currentSong.title)
-					||
-					!this.lastSongTitle	
-				) {
-					console.log(this.currentSong);
-					this.lastSongTitle = this.currentSong.title;
-				}
+				console.log(this.currentSong);
 
 				trayManager.update(this.currentSong);
 				if (!store.get("showPresence")) return clearActivity();
