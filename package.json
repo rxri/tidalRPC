@@ -15,7 +15,7 @@
 		"build:win32": "tsc && pnpm run copy && electron-builder -c configs/builder/windows.json",
 		"build:ci:macos": "tsc && pnpm run copy:macos && electron-builder -c configs/builder/macos.json -p never",
 		"build:ci:win": "tsc && pnpm run copy:win32 && electron-builder -c configs/builder/windows.json -p never",
-		"postinstall": "pnpm exec electron-builder install-app-deps"
+		"postinstall": "npm exec electron-builder install-app-deps"
 	},
 	"type": "module",
 	"dependencies": {

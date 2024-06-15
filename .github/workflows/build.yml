@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-13, windows-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +30,7 @@ jobs:
           if [ "$RUNNER_OS" == "Windows" ]; then
             python3 -m pip install setuptools
           else
-            brew install python-setuptools
+            sudo -H pip install setuptools
           fi
         shell: bash
       - name: Install packages
@@ -50,13 +50,13 @@ jobs:
         with:
           name: tidalRPC-${{ matrix.os }}
           path: app/tidalRPC-mac-x64.dmg
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-13'
       - name: Upload DMG (macOS arm64)
         uses: actions/upload-artifact@v3
         with:
           name: tidalRPC-${{ matrix.os }}
           path: app/tidalRPC-mac-arm64.dmg
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-13'
       - name: Upload Installer (Windows)
         uses: actions/upload-artifact@v3
         with:
