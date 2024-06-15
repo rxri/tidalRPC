@@ -1,8 +1,8 @@
-import { Client, Presence } from "discord-rpc";
-import { clientID, logger } from "../config";
+import { Client, type Presence } from "discord-rpc";
+import { clientID } from "../config.js";
 
-import Song from "@classes/song";
-import { store } from "@util/config";
+import type Song from "../classes/song.js";
+import { AlbumPrefs, ArtistPrefs, store } from "../util/config.js";
 
 export let rpcClient: DiscordClient;
 
@@ -18,7 +18,7 @@ class DiscordClient {
 		rpcClient = this;
 		this.clientId = clientID;
 		this.client = new Client({
-			transport: "ipc"
+			transport: "ipc",
 		});
 
 		this.client.on("ready", () => {
@@ -32,20 +32,18 @@ class DiscordClient {
 			() => {
 				this.client.destroy();
 				rpcClient = this;
-			}
+			},
 		);
 
-		this.client
-			.login({ clientId: this.clientId })
-			.catch((err: any) => console.error(err));
+		this.client.login({ clientId: this.clientId }).catch((err: unknown) => console.error(err));
 	}
 
 	setActivity(data?: Presence) {
-		data = data ? data : this.actualPresence;
+		const rpcData = data ? data : this.actualPresence;
 		if (!this.ready) return;
 		if (this.activityCleared) this.activityCleared = false;
 
-		this.client.setActivity(data).catch(() => this.client.destroy());
+		this.client.setActivity(rpcData).catch(() => this.client.destroy());
 	}
 
 	clearActivity() {
@@ -66,32 +64,49 @@ export const setActivity = (data: Song) => {
 		if (!data?.startTime) return clearActivity();
 
 		const presenceData: Presence = {
-			largeImageKey: data.largeImage
+			largeImageKey: data.largeImage,
 		};
 
-		if (data.album) presenceData.largeImageText = data.album.name;
+		if (data.album) {
+			switch (store.get("albumPrefs")) {
+				case AlbumPrefs.withYear:
+					presenceData.largeImageText = `${data.album.name} (${data.album.year})`;
+					break;
+				case AlbumPrefs.justName:
+					presenceData.largeImageText = data.album.name;
+					break;
+			}
+		}
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;
-		else
-			presenceData.endTimestamp =
-				data.startTime + data.duration + data.pausedTime;
+		else presenceData.endTimestamp = data.startTime + data.duration + data.pausedTime;
 
-		presenceData.state = data.artist;
+		switch (store.get("artistPrefs")) {
+			case ArtistPrefs.byName:
+				presenceData.state = `by ${data.artist}`;
+				break;
+			case ArtistPrefs.justName:
+				presenceData.state = `${data.artist}`;
+		}
+
 		presenceData.details = data.title;
 
-		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons"))
-			presenceData.buttons = data.buttons;
+		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons")) presenceData.buttons = data.buttons;
 
 		if (data.duration && presenceData.startTimestamp)
+			// biome-ignore lint/performance/noDelete: <explanation>
 			delete presenceData.startTimestamp;
-
-		if (rpcClient && Date.now() - rpcClient.lastCall < 5000) return;
-		if (rpcClient) rpcClient.lastCall = Date.now();
 
 		if (!rpcClient) {
 			rpcClient = new DiscordClient(clientID);
 			rpcClient.actualPresence = presenceData;
-		} else rpcClient.setActivity(presenceData);
+			return;
+		}
+
+		if (rpcClient && Date.now() - rpcClient.lastCall < 5000) return;
+		if (rpcClient) rpcClient.lastCall = Date.now();
+
+		rpcClient.setActivity(presenceData);
 	},
 	clearActivity = () => {
 		if (!rpcClient) return;

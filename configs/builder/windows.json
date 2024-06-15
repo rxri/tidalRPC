@@ -16,5 +16,5 @@
 		"artifactName": "tidalRPC-installer.exe",
 		"publish": null
 	},
-	"npmRebuild": false
+	"npmRebuild": true
 }

@@ -1,9 +1,9 @@
-import App from "./app";
-import TrayManager from "@managers/trayManager";
+import App from "./app.js";
+import TrayManager from "./managers/trayManager.js";
 import { app } from "electron";
-import { destroyClient } from "@managers/discordManager";
-import { platform } from "os";
-import { store } from "@util/config";
+import { destroyClient } from "./managers/discordManager.js";
+import { platform } from "node:os";
+import { store } from "./util/config.js";
 
 export let trayManager: TrayManager;
 
@@ -16,15 +16,12 @@ app.whenReady().then(async () => {
 	trayManager.update();
 
 	if (platform() === "darwin") app.dock.hide();
-	if (
-		app.isPackaged &&
-		store.get("autoStart") &&
-		!app.getLoginItemSettings().openAtLogin
-	)
+	if (app.isPackaged && store.get("autoStart") && !app.getLoginItemSettings().openAtLogin) {
 		app.setLoginItemSettings({
 			openAtLogin: true,
-			openAsHidden: true
+			openAsHidden: true,
 		});
+	}
 
 	const Application = new App();
 	Application.start();

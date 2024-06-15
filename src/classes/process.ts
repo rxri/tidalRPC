@@ -1,4 +1,5 @@
-import { Window, windowManager } from "node-window-manager";
+import { type Window, windowManager } from "node-window-manager";
+import type { TidalStatus } from "../interfaces/tidalStatus.js";
 
 export default class Process {
 	private titleRegex: RegExp;
@@ -8,10 +9,13 @@ export default class Process {
 		this.tidalStatus = { status: "closed", windowTitle: null };
 	}
 
-	async getTidalTitle(): Promise<string | void> {
+	async getTidalTitle(): Promise<string | undefined> {
 		const data = await this._getProcessList();
 
-		if (!data) return (this.tidalStatus.status = "closed");
+		if (!data) {
+			this.tidalStatus.status = "closed";
+			return;
+		}
 
 		data.map(async window => {
 			const windowTitle = window.getTitle();
@@ -23,28 +27,25 @@ export default class Process {
 					windowTitle.includes("Default IME") ||
 					windowTitle.includes("MediaPlayer SMTC window")
 				)
-			)
-				return (
-					(this.tidalStatus.status = "opened"),
-					(this.tidalStatus.windowTitle = windowTitle)
-				);
+			) {
+				this.tidalStatus.status = "opened";
+				this.tidalStatus.windowTitle = windowTitle;
+				return;
+			}
 		});
 
-		if (
-			this.tidalStatus.windowTitle &&
-			this.titleRegex.test(this.tidalStatus.windowTitle)
-		)
-			return (this.tidalStatus.status = "playing");
+		if (this.tidalStatus.windowTitle && this.titleRegex.test(this.tidalStatus.windowTitle)) {
+			this.tidalStatus.status = "playing";
+			return;
+		}
 	}
 
 	private async _getProcessList(): Promise<Window[] | null> {
 		try {
-			const runningProcesses = await windowManager.getWindows(),
-				findTIDAL = await runningProcesses.filter(
-					(window: { path: string | string[] }) => {
-						return window.path.includes("TIDAL");
-					}
-				);
+			const runningProcesses = windowManager.getWindows();
+			const findTIDAL = runningProcesses.filter((window: { path: string | string[] }) => {
+				return window.path.includes("TIDAL");
+			});
 
 			if (findTIDAL.length === 0) return null;
 

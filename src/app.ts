@@ -1,12 +1,11 @@
 import { app, dialog, systemPreferences } from "electron";
-import { platform, version } from "os";
 
-import TidalManager from "@managers/tidalManager";
-import { arch } from "process";
-import { autoUpdater } from "electron-updater";
-import { blue } from "chalk";
+import TidalManager from "./managers/tidalManager.js";
+import pkg from "electron-updater";
 import debug from "debug";
-import { logger } from "./config";
+import { logger } from "./config.js";
+
+const { autoUpdater } = pkg;
 
 export default class App {
 	private logger: debug.Debugger;
@@ -25,8 +24,7 @@ export default class App {
 	}
 
 	private _consoleLog() {
-		console.log(`TidalRPC v${version()}`);
-		console.log(`App version: ${blue(`v${app.getVersion()}`)}`);
+		console.log(`TidalRPC v${app.getVersion()}`);
 	}
 
 	private _checkUpdates() {
@@ -55,14 +53,11 @@ export default class App {
 	private async _checkPerms() {
 		const screenPerms = await systemPreferences.getMediaAccessStatus("screen");
 		if (screenPerms !== ("denied" || "restricted")) {
-			this.logger.extend("Permissions")(
-				"Screen recording permissions: Authorized."
-			);
 			return;
 		}
 
 		this.logger.extend("Permissions")(
-			"This program doesn't have authorized perms for screen recording. Please fix that!"
+			"This program doesn't have authorized perms for screen recording. TidalRPC needs to be authorized to record screen to get window title.",
 		);
 
 		const dialogVar = await dialog.showMessageBoxSync({
@@ -71,7 +66,7 @@ export default class App {
 				"TidalRPC doesn't have screen recording permissions. Please add TidalRPC to Screen Recording permissions in 'System Preferences' or 'System Settings'.",
 			buttons: ["Close program"],
 			defaultId: 0,
-			type: "error"
+			type: "error",
 		});
 
 		switch (dialogVar) {
