@@ -21,10 +21,18 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: latest
-      - uses: actions/setup-node@master
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
+      - name: Install Python setup tools
+        run: |
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            python3 -m pip install setuptools
+          else
+            brew install python-setuptools
+          fi
+        shell: bash
       - name: Install packages
         run: |
           pnpm install
@@ -34,7 +42,7 @@ jobs:
           if [ "$RUNNER_OS" == "Windows" ]; then
             pnpm run build:ci:win
           else
-            chmod +x ./node_modules/.bin/tscpaths && pnpm run build:ci:macos
+            pnpm run build:ci:macos
           fi
         shell: bash
       - name: Upload DMG (macOS x86_64)
