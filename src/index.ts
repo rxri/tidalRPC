@@ -2,7 +2,7 @@ import App from "./app";
 import TrayManager from "@managers/trayManager";
 import { app } from "electron";
 import { destroyClient } from "@managers/discordManager";
-import { platform } from "os";
+import { platform } from "node:os";
 import { store } from "@util/config";
 
 export let trayManager: TrayManager;
@@ -20,11 +20,12 @@ app.whenReady().then(async () => {
 		app.isPackaged &&
 		store.get("autoStart") &&
 		!app.getLoginItemSettings().openAtLogin
-	)
+	) {
 		app.setLoginItemSettings({
 			openAtLogin: true,
-			openAsHidden: true
+			openAsHidden: true,
 		});
+	}
 
 	const Application = new App();
 	Application.start();
@@ -34,7 +35,7 @@ app.on("will-quit", () => destroyClient());
 
 process.on("SIGINT", async () => process.exit(0));
 
-process.on("uncaughtException", err => {
+process.on("uncaughtException", (err) => {
 	console.error(err);
 	process.exit(1);
 });

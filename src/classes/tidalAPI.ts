@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, HeadersDefaults } from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 export default class TidalAPI {
 	private baseURL: string;
@@ -7,12 +7,12 @@ export default class TidalAPI {
 	private isResultPending: boolean;
 	constructor() {
 		this.baseURL = "https://api.tidal.com/v1";
-		this.webToken = "CzET4vdadNUFQ5JU";
+		this.webToken = "49YxDN9a2aFV6RTG";
 		this.axios = axios.create({
 			baseURL: this.baseURL,
 			headers: {
-				"x-tidal-token": this.webToken
-			}
+				"X-Tidal-Token": this.webToken,
+			},
 		});
 		this.isResultPending = false;
 	}
@@ -30,9 +30,9 @@ export default class TidalAPI {
 					query,
 					limit,
 					offset: 0,
-					countryCode: "US"
+					countryCode: "US",
 				},
-				timeout: 120000
+				timeout: 10000,
 			});
 
 			if (res.data.items.length === 0) {
@@ -58,9 +58,9 @@ export default class TidalAPI {
 				url: `/albums/${id}`,
 				params: {
 					offset: 0,
-					countryCode: "US"
+					countryCode: "US",
 				},
-				timeout: 15000
+				timeout: 10000,
 			});
 
 			if (res.status === 404) return [];

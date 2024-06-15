@@ -1,12 +1,12 @@
 import Store from "electron-store";
 
-export const enum ArtistPrefs {
-	justName,
-	byName
+export enum ArtistPrefs {
+	justName = 0,
+	byName = 1,
 }
-export const enum AlbumPrefs {
-	justName,
-	withYear
+export enum AlbumPrefs {
+	justName = 0,
+	withYear = 1,
 }
 
 export const store = new Store({
@@ -15,6 +15,6 @@ export const store = new Store({
 		showButtons: true,
 		autoStart: true,
 		artistPrefs: ArtistPrefs.justName,
-		albumPrefs: AlbumPrefs.justName
-	}
+		albumPrefs: AlbumPrefs.justName,
+	},
 });

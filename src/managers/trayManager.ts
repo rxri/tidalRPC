@@ -1,10 +1,10 @@
 import { Menu, Tray, app } from "electron";
 
-import Song from "@classes/song";
-import debug from "debug";
-import { join } from "path";
+import type Song from "@classes/song";
+import type debug from "debug";
+import { join } from "node:path";
 import { logger } from "../config";
-import { platform } from "os";
+import { platform } from "node:os";
 import { rpcClient } from "@managers/discordManager";
 import { AlbumPrefs, ArtistPrefs, store } from "@util/config";
 import { trayManager } from "../";
@@ -32,15 +32,15 @@ export default class TrayManager {
 		const menu = Menu.buildFromTemplate([
 			{
 				label: `TidalRPC ${app.getVersion()}`,
-				enabled: false
+				enabled: false,
 			},
 			{
 				label: `Playing: ${song?.artist} - ${song?.title}`,
 				enabled: false,
-				visible: song ? true : false
+				visible: !!song,
 			},
 			{
-				type: "separator"
+				type: "separator",
 			},
 			{
 				label: "Settings",
@@ -49,16 +49,16 @@ export default class TrayManager {
 						label: "Start at System Startup",
 						type: "checkbox",
 						checked: store.get("autoStart"),
-						enabled: app.isPackaged ? true : false,
+						enabled: !!app.isPackaged,
 						click: () => {
 							store.set("autoStart", !store.get("autoStart"));
 							store.get("autoStart") && app.isPackaged
 								? app.setLoginItemSettings({
 										openAtLogin: true,
-										openAsHidden: true
-								  })
+										openAsHidden: true,
+									})
 								: app.setLoginItemSettings({ openAtLogin: false });
-						}
+						},
 					},
 					{
 						label: "Show Rich Presence",
@@ -71,65 +71,68 @@ export default class TrayManager {
 								!store.get("showPresence")
 							)
 								rpcClient.clearActivity();
-						}
+						},
 					},
 					{
 						label: "Rich Presence settings",
 						submenu: [
 							{
-								label: "Show Buttons in Rich Presence",
+								label: "Show buttons",
 								type: "checkbox",
 								checked: store.get("showButtons"),
-								click: () => store.set("showButtons", !store.get("showButtons"))
-							},
-							{ 
-								type: "separator"
+								click: () =>
+									store.set("showButtons", !store.get("showButtons")),
 							},
 							{
-								label: "Album Display Options",
-								enabled: false
+								type: "separator",
 							},
 							{
-								label: song ? `${song.album.name}` : `[ALBUM NAME]`,
+								label: "Album format",
+								enabled: false,
+							},
+							{
+								label: song ? song.album.name : "[ALBUM NAME]",
 								type: "radio",
-								checked: store.get("albumPrefs") == AlbumPrefs.justName,
-								click: () => store.set("albumPrefs", AlbumPrefs.justName)
+								checked: store.get("albumPrefs") === AlbumPrefs.justName,
+								click: () => store.set("albumPrefs", AlbumPrefs.justName),
 							},
 							{
-								label: song ? `${song.album.name} (${song.album.year})` : `[ALBUM NAME] ([ALBUM YEAR])`,
+								label: song
+									? `${song.album.name} (${song.album.year})`
+									: "[ALBUM NAME] ([ALBUM YEAR])",
 								type: "radio",
-								checked: store.get("albumPrefs") == AlbumPrefs.withYear,
-								click: () => store.set("albumPrefs", AlbumPrefs.withYear)
-							},
-							{ 
-								type: "separator"
+								checked: store.get("albumPrefs") === AlbumPrefs.withYear,
+								click: () => store.set("albumPrefs", AlbumPrefs.withYear),
 							},
 							{
-								label: "Song Display Options",
-								enabled: false
+								type: "separator",
 							},
 							{
-								label: song ? `${song.title}` : `[SONG TITLE]`,
-								sublabel: song ? `${song.artist}` : `[SONG ARTIST]`,
+								label: "Song format",
+								enabled: false,
+							},
+							{
+								label: song ? song.title : "[SONG TITLE]",
+								sublabel: song ? song.artist : "[SONG ARTIST]",
 								type: "radio",
-								checked: store.get("artistPrefs") == ArtistPrefs.justName,
-								click: () => store.set("artistPrefs", ArtistPrefs.justName)
+								checked: store.get("artistPrefs") === ArtistPrefs.justName,
+								click: () => store.set("artistPrefs", ArtistPrefs.justName),
 							},
 							{
-								label: song ? `${song.title}` : `[SONG TITLE]`,
-								sublabel: song ? `by ${song.artist}` : `by [SONG ARTIST]`,
+								label: song ? `${song.title}` : "[SONG TITLE]",
+								sublabel: song ? `by ${song.artist}` : "by [SONG ARTIST]",
 								type: "radio",
-								checked: store.get("artistPrefs") == ArtistPrefs.byName,
-								click: () => store.set("artistPrefs", ArtistPrefs.byName)
-							}
-						]
-					}
-				]
+								checked: store.get("artistPrefs") === ArtistPrefs.byName,
+								click: () => store.set("artistPrefs", ArtistPrefs.byName),
+							},
+						],
+					},
+				],
 			},
 			{
 				label: "Exit",
-				role: "quit"
-			}
+				role: "quit",
+			},
 		]);
 		this.systray.setContextMenu(menu);
 	}
