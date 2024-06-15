@@ -1,15 +1,16 @@
 import { Menu, Tray, app } from "electron";
 
-import type Song from "@classes/song";
+import type Song from "../classes/song.js";
 import type debug from "debug";
 import { join } from "node:path";
-import { logger } from "../config";
+import { logger } from "../config.js";
 import { platform } from "node:os";
-import { rpcClient } from "@managers/discordManager";
-import { AlbumPrefs, ArtistPrefs, store } from "@util/config";
-import { trayManager } from "../";
+import { rpcClient } from "./discordManager.js";
+import { AlbumPrefs, ArtistPrefs, store } from "../util/config.js";
+import { trayManager } from "../index.js";
 
 let trayIcon: string;
+const __dirname = import.meta.dirname;
 
 switch (platform()) {
 	case "darwin":
@@ -66,11 +67,7 @@ export default class TrayManager {
 						checked: store.get("showPresence"),
 						click: () => {
 							store.set("showPresence", !store.get("showPresence"));
-							if (
-								typeof rpcClient !== "undefined" &&
-								!store.get("showPresence")
-							)
-								rpcClient.clearActivity();
+							if (typeof rpcClient !== "undefined" && !store.get("showPresence")) rpcClient.clearActivity();
 						},
 					},
 					{
@@ -80,8 +77,7 @@ export default class TrayManager {
 								label: "Show buttons",
 								type: "checkbox",
 								checked: store.get("showButtons"),
-								click: () =>
-									store.set("showButtons", !store.get("showButtons")),
+								click: () => store.set("showButtons", !store.get("showButtons")),
 							},
 							{
 								type: "separator",
@@ -97,9 +93,7 @@ export default class TrayManager {
 								click: () => store.set("albumPrefs", AlbumPrefs.justName),
 							},
 							{
-								label: song
-									? `${song.album.name} (${song.album.year})`
-									: "[ALBUM NAME] ([ALBUM YEAR])",
+								label: song ? `${song.album.name} (${song.album.year})` : "[ALBUM NAME] ([ALBUM YEAR])",
 								type: "radio",
 								checked: store.get("albumPrefs") === AlbumPrefs.withYear,
 								click: () => store.set("albumPrefs", AlbumPrefs.withYear),

@@ -9,7 +9,15 @@ export enum AlbumPrefs {
 	withYear = 1,
 }
 
-export const store = new Store({
+export interface Config {
+	showPresence: boolean;
+	showButtons: boolean;
+	autoStart: boolean;
+	artistPrefs: ArtistPrefs;
+	albumPrefs: AlbumPrefs;
+}
+
+export const store = new Store<Config>({
 	defaults: {
 		showPresence: true,
 		showButtons: true,

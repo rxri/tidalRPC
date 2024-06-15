@@ -1,10 +1,10 @@
-import { clearActivity, setActivity } from "@managers/discordManager";
+import { clearActivity, setActivity } from "./discordManager.js";
 
-import Process from "@classes/process";
-import Song from "@classes/song";
-import TidalAPI from "@classes/tidalAPI";
-import { store } from "@util/config";
-import { trayManager } from "../";
+import Process from "../classes/process.js";
+import Song from "../classes/song.js";
+import TidalAPI from "../classes/tidalAPI.js";
+import { store } from "../util/config.js";
+import { trayManager } from "../index.js";
 
 export default class TidalManager {
 	private api: TidalAPI;
@@ -42,22 +42,16 @@ export default class TidalManager {
 				 */
 				const authors = data[data.length - 1].trim().split(", ");
 
-				let songsInfo = await this.api.searchSong(
-					`${title} ${authors.toString()}`,
-				);
+				let songsInfo = await this.api.searchSong(`${title} ${authors.toString()}`);
 
 				if (!songsInfo || songsInfo.length === 0) {
 					/** TIDAL's api will occasionally return no results for songs with very long names.
 					 * So, we truncate the title when we try again
 					 */
-					songsInfo = await this.api.searchSong(
-						`${title.substring(0, 70)} ${authors[0]}`,
-					);
+					songsInfo = await this.api.searchSong(`${title.substring(0, 70)} ${authors[0]}`);
 
 					if (!songsInfo || songsInfo.length === 0) {
-						console.error(
-							`Couldn't find current song info for '${tidalStatus.windowTitle}' title`,
-						);
+						console.error(`Couldn't find current song info for '${tidalStatus.windowTitle}' title`);
 						clearActivity();
 						this._clearCurrentSong();
 						return;
@@ -65,30 +59,21 @@ export default class TidalManager {
 				}
 
 				const foundSong = songsInfo
-					.map((s) => {
-						if (
-							s.title === data[0].trim() &&
-							authors.length === s.artists.length
-						)
-							return s;
+					.map(s => {
+						if (s.title === data[0].trim() && authors.length === s.artists.length) return s;
 					})
-					.filter((s) => {
+					.filter(s => {
 						return s;
 					})[0];
 
-				if (!foundSong)
-					return console.error(
-						`Couldn't find an entry in TIDAL's API for ${title} by ${authors.toString()}`,
-					);
+				if (!foundSong) return console.error(`Couldn't find an entry in TIDAL's API for ${title} by ${authors.toString()}`);
 
 				const getAlbumInfo = await this.api.getAlbumById(foundSong.album.id);
 				const timeNow = Math.floor(new Date().getTime() / 1000);
 
 				if (
-					timeNow - this.currentSong.startTime + this.currentSong.pausedTime >=
-						this.currentSong.duration ||
-					(this.currentSong.title !== foundSong.title &&
-						this.currentSong.artist !== this._getAuthors(foundSong.artists))
+					timeNow - this.currentSong.startTime + this.currentSong.pausedTime >= this.currentSong.duration ||
+					(this.currentSong.title !== foundSong.title && this.currentSong.artist !== this._getAuthors(foundSong.artists))
 				) {
 					this.currentSong.startTime = timeNow;
 					this.currentSong.pausedTime = 0;
@@ -135,10 +120,8 @@ export default class TidalManager {
 		trayManager.update();
 	}
 
-	private _getAuthors(
-		res: [{ id: number; name: string; type: "string"; picture: string | null }],
-	) {
-		const authorString: string = res.map((a) => a.name).join(", ");
+	private _getAuthors(res: [{ id: number; name: string; type: "string"; picture: string | null }]) {
+		const authorString: string = res.map(a => a.name).join(", ");
 
 		return authorString;
 	}

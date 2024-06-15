@@ -1,8 +1,8 @@
 import { Client, type Presence } from "discord-rpc";
-import { clientID } from "../config";
+import { clientID } from "../config.js";
 
-import type Song from "@classes/song";
-import { AlbumPrefs, ArtistPrefs, store } from "@util/config";
+import type Song from "../classes/song.js";
+import { AlbumPrefs, ArtistPrefs, store } from "../util/config.js";
 
 export let rpcClient: DiscordClient;
 
@@ -35,9 +35,7 @@ class DiscordClient {
 			},
 		);
 
-		this.client
-			.login({ clientId: this.clientId })
-			.catch((err: unknown) => console.error(err));
+		this.client.login({ clientId: this.clientId }).catch((err: unknown) => console.error(err));
 	}
 
 	setActivity(data?: Presence) {
@@ -81,9 +79,7 @@ export const setActivity = (data: Song) => {
 		}
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;
-		else
-			presenceData.endTimestamp =
-				data.startTime + data.duration + data.pausedTime;
+		else presenceData.endTimestamp = data.startTime + data.duration + data.pausedTime;
 
 		switch (store.get("artistPrefs")) {
 			case ArtistPrefs.byName:
@@ -95,8 +91,7 @@ export const setActivity = (data: Song) => {
 
 		presenceData.details = data.title;
 
-		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons"))
-			presenceData.buttons = data.buttons;
+		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons")) presenceData.buttons = data.buttons;
 
 		if (data.duration && presenceData.startTimestamp)
 			// biome-ignore lint/performance/noDelete: <explanation>

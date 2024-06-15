@@ -1,4 +1,5 @@
 import { type Window, windowManager } from "node-window-manager";
+import type { TidalStatus } from "../interfaces/tidalStatus.js";
 
 export default class Process {
 	private titleRegex: RegExp;
@@ -16,7 +17,7 @@ export default class Process {
 			return;
 		}
 
-		data.map(async (window) => {
+		data.map(async window => {
 			const windowTitle = window.getTitle();
 
 			if (
@@ -33,10 +34,7 @@ export default class Process {
 			}
 		});
 
-		if (
-			this.tidalStatus.windowTitle &&
-			this.titleRegex.test(this.tidalStatus.windowTitle)
-		) {
+		if (this.tidalStatus.windowTitle && this.titleRegex.test(this.tidalStatus.windowTitle)) {
 			this.tidalStatus.status = "playing";
 			return;
 		}
@@ -45,11 +43,9 @@ export default class Process {
 	private async _getProcessList(): Promise<Window[] | null> {
 		try {
 			const runningProcesses = windowManager.getWindows();
-			const findTIDAL = runningProcesses.filter(
-				(window: { path: string | string[] }) => {
-					return window.path.includes("TIDAL");
-				},
-			);
+			const findTIDAL = runningProcesses.filter((window: { path: string | string[] }) => {
+				return window.path.includes("TIDAL");
+			});
 
 			if (findTIDAL.length === 0) return null;
 

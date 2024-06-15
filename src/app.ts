@@ -1,9 +1,11 @@
 import { app, dialog, systemPreferences } from "electron";
 
-import TidalManager from "@managers/tidalManager";
-import { autoUpdater } from "electron-updater";
+import TidalManager from "./managers/tidalManager.js";
+import pkg from "electron-updater";
 import debug from "debug";
-import { logger } from "./config";
+import { logger } from "./config.js";
+
+const { autoUpdater } = pkg;
 
 export default class App {
 	private logger: debug.Debugger;
@@ -27,11 +29,11 @@ export default class App {
 
 	private _checkUpdates() {
 		autoUpdater.autoDownload = false;
-		autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+		autoUpdater.checkForUpdatesAndNotify().catch(err => {
 			console.error(err);
 		});
 		autoUpdater.on("update-available", () => {
-			autoUpdater.downloadUpdate().catch((err) => {
+			autoUpdater.downloadUpdate().catch(err => {
 				console.error(err);
 			});
 		});
