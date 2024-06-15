@@ -2,7 +2,7 @@ import { Client, Presence } from "discord-rpc";
 import { clientID, logger } from "../config";
 
 import Song from "@classes/song";
-import { store } from "@util/config";
+import { AlbumPrefs, ArtistPrefs, store } from "@util/config";
 
 export let rpcClient: DiscordClient;
 
@@ -69,14 +69,31 @@ export const setActivity = (data: Song) => {
 			largeImageKey: data.largeImage
 		};
 
-		if (data.album) presenceData.largeImageText = data.album.name;
+		if (data.album) {
+			switch (store.get("albumPrefs")) {
+				case AlbumPrefs.withYear:
+					presenceData.largeImageText = `${data.album.name} (${data.album.year})`;
+					break;
+				default:
+				case AlbumPrefs.justName:
+					presenceData.largeImageText = `${data.album.name}`;				
+					break;
+				}
+		}
 
 		if (!data.duration) presenceData.startTimestamp = data.startTime;
 		else
 			presenceData.endTimestamp =
 				data.startTime + data.duration + data.pausedTime;
 
-		presenceData.state = data.artist;
+		switch(store.get("artistPrefs")) {
+			case ArtistPrefs.byName:
+				presenceData.state = `by ${data.artist}`;
+				break;
+			default:
+			case ArtistPrefs.justName:
+				presenceData.state = `${data.artist}`;
+		}
 		presenceData.details = data.title;
 
 		if (data.buttons && data.buttons.length !== 0 && store.get("showButtons"))
@@ -85,13 +102,16 @@ export const setActivity = (data: Song) => {
 		if (data.duration && presenceData.startTimestamp)
 			delete presenceData.startTimestamp;
 
-		if (rpcClient && Date.now() - rpcClient.lastCall < 5000) return;
-		if (rpcClient) rpcClient.lastCall = Date.now();
-
 		if (!rpcClient) {
 			rpcClient = new DiscordClient(clientID);
 			rpcClient.actualPresence = presenceData;
-		} else rpcClient.setActivity(presenceData);
+			return;
+		}
+
+		if (rpcClient && Date.now() - rpcClient.lastCall < 5000) return;
+		if (rpcClient) rpcClient.lastCall = Date.now();
+
+		rpcClient.setActivity(presenceData);
 	},
 	clearActivity = () => {
 		if (!rpcClient) return;

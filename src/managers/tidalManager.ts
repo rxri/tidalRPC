@@ -9,6 +9,7 @@ import { trayManager } from "../";
 export default class TidalManager {
 	private api: TidalAPI;
 	private currentSong: Song;
+	private lastSongTitle: string;
 	constructor() {
 		this.api = new TidalAPI();
 		this.currentSong = new Song();
@@ -31,41 +32,59 @@ export default class TidalManager {
 				}
 				break;
 			case "playing": {
-				const data = tidalStatus.windowTitle?.trim().split("-");
-				if (!data) return console.error("Can't get current song");
+				/**
+				 * Window title format: "[TRACK NAME] - [ARTIST NAME]"
+				 * Example: "Shake It Off - Taylor Swift" 
+				 * 
+				 *! This solution is imperfect. It will split within an artist or track's name
+				 *! if the delimiter is present.
+				 */
+				let data = tidalStatus.windowTitle?.trim().split(" - ");
+				if (!data)
+					return console.error("Can't get current song");
 
 				const title = data[0].trim(),
-					authors = data[1].trim().split(", ");
+					/** Because the window title may not be split perfectly, we take
+					 * the last token, as it's guaranteed to be part of the artist name. 
+					*/  
+					authors = data[data.length - 1].trim().split(", ");
 
 				let songsInfo = await this.api.searchSong(
 					`${title} ${authors.toString()}`
 				);
 
 				if (!songsInfo || songsInfo.length === 0) {
-					songsInfo = await this.api.searchSong(`${title} ${authors[0]}`);
+					/** TIDAL's api will occasionally return no results for songs with very long names.
+					 * So, we truncate the title when we try again
+					 */ 
+					songsInfo = await this.api.searchSong(`${title.substring(0,40)} ${authors[0]}`);
 
 					if (!songsInfo || songsInfo.length === 0)
-						return clearActivity(), this._clearCurrentSong();
+						return console.error(`Couldn't find current song info from name ${tidalStatus.windowTitle}`)
+							, clearActivity()
+							, this._clearCurrentSong();
+		
 				}
 
 				const foundSong = songsInfo
 					.map(s => {
-						if (s.title === title && authors.length === s.artists.length)
+						if (s.title === data[0].trim() && authors.length === s.artists.length)
 							return s;
 					})
 					.filter(s => {
 						return s;
 					})[0];
 
+				if (!foundSong) return console.error(`Couldn't find an entry in TIDAL's API for ${title} by ${authors.toString()}`)
+
 				const getAlbumInfo = await this.api.getAlbumById(foundSong.album.id),
 					timeNow = ~~(new Date().getTime() / 1000);
 
 				if (
-					timeNow -
-						(this.currentSong.startTime + this.currentSong.pausedTime) >=
-						this.currentSong.duration ||
-					(this.currentSong.title !== foundSong.title &&
-						this.currentSong.artist !== this._getAuthors(foundSong.artists))
+					timeNow - this.currentSong.startTime + this.currentSong.pausedTime 
+						>= this.currentSong.duration 
+					|| (this.currentSong.title !== foundSong.title 
+						&& this.currentSong.artist !== this._getAuthors(foundSong.artists))
 				) {
 					this.currentSong.startTime = timeNow;
 					this.currentSong.pausedTime = 0;
@@ -89,8 +108,8 @@ export default class TidalManager {
 
 				if (foundSong.url) {
 					this.currentSong.buttons?.push({
-						label: "Play on Tidal",
-						url: foundSong.url
+						label: "Play on Your Streaming Platform",
+						url: `${foundSong.url}?u` //The '?u' allows opening the track on other platforms
 					});
 				}
 
