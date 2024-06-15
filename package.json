@@ -25,7 +25,7 @@
 		"discord-rpc": "4.0.1",
 		"electron-store": "10.0.0",
 		"electron-updater": "6.2.1",
-		"node-window-manager": "ririxidev/node-window-manager",
+		"node-window-manager": "github:rxri/node-window-manager",
 		"run-script-os": "1.1.6"
 	},
 	"devDependencies": {

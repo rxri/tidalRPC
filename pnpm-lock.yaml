@@ -27,8 +27,8 @@ importers:
         specifier: 6.2.1
         version: 6.2.1
       node-window-manager:
-        specifier: ririxidev/node-window-manager
-        version: git+https://git@github.com:ririxidev/node-window-manager.git#750e41994681d9307be178f8d45364e3f79d2300
+        specifier: github:rxri/node-window-manager
+        version: https://codeload.github.com/rxri/node-window-manager/tar.gz/750e41994681d9307be178f8d45364e3f79d2300
       run-script-os:
         specifier: 1.1.6
         version: 1.1.6
@@ -1510,8 +1510,8 @@ packages:
     engines: {node: ^12.13 || ^14.13 || >=16}
     hasBin: true
 
-  node-window-manager@git+https://git@github.com:ririxidev/node-window-manager.git#750e41994681d9307be178f8d45364e3f79d2300:
-    resolution: {commit: 750e41994681d9307be178f8d45364e3f79d2300, repo: git@github.com:ririxidev/node-window-manager.git, type: git}
+  node-window-manager@https://codeload.github.com/rxri/node-window-manager/tar.gz/750e41994681d9307be178f8d45364e3f79d2300:
+    resolution: {tarball: https://codeload.github.com/rxri/node-window-manager/tar.gz/750e41994681d9307be178f8d45364e3f79d2300}
     version: 2.2.5
 
   nodemon@3.1.0:
@@ -4026,7 +4026,7 @@ snapshots:
       - bluebird
       - supports-color
 
-  node-window-manager@git+https://git@github.com:ririxidev/node-window-manager.git#750e41994681d9307be178f8d45364e3f79d2300:
+  node-window-manager@https://codeload.github.com/rxri/node-window-manager/tar.gz/750e41994681d9307be178f8d45364e3f79d2300:
     dependencies:
       extract-file-icon: 0.3.2
       node-addon-api: 2.0.0
