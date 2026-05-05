@@ -19,7 +19,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"axios": "1.6.8",
+		"axios": "1.15.2",
 		"chalk": "5.3.0",
 		"debug": "4.3.5",
 		"discord-rpc": "4.0.1",
